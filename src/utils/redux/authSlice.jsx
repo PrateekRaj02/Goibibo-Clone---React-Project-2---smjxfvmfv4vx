@@ -4,8 +4,8 @@ const authSlice=createSlice({
     name:"auth",
     initialState:{
         isLogin:window.localStorage.getItem("isLogin"),
-        isLoginPopup:false,
-        isSignupPopup:false,
+        showLoginSignupForm:false,
+        // isSignupPopup:false,
         token:null,
     },
     reducers:{
@@ -13,13 +13,13 @@ const authSlice=createSlice({
             window.localStorage.setItem("isLogin",true);
             state.isLogin = action.payload;
         },
-        setIsLoginPopup:(state,action)=>{
-            state.isLoginPopup=action.payload;
+        setShowLoginSignupForm:(state,action)=>{
+            state.showLoginSignupForm=action.payload;
         },
     }
 
 })
 
-export const {setIsLogin,setIsLoginPopup}=authSlice.actions;
+export const {setIsLogin,setShowLoginSignupForm}=authSlice.actions;
 
 export default authSlice.reducer;

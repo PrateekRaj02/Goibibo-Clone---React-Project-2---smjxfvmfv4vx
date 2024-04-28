@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { baseUrl, projectId } from "../../utils/constant";
 import { Select, TextField, Typography } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import OfferForYou from "../offer-fory-you-carousel/OfferForYou";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,22 +14,41 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import FormControl from "@mui/material/FormControl";
 import Flight_Footer from "./Flight_Footer";
 import SearchOption from "./SearchOption";
-import { setDestinationSelectedAirport,setSourceSelectedAirport } from "../../utils/redux/flightSlice";
+import {
+  setDestinationAirport,
+  setDestinationSelectedAirport,
+  setSelectedDay,
+  setSourceAirport,
+  setSourceSelectedAirport,
+} from "../../utils/redux/flightSlice";
+import Autocomplete from "@mui/material/Autocomplete";
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Stack from "@mui/material/Stack";
+import dayjs from "dayjs";
 
 const Flight_Page = () => {
-  const [fromOpen,setFromOpen]=useState(false);
-  const [toOpen,setToOpen]=useState(false);
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
   // const [source, setSource] = useState("");
   // const [destination, setDestination] = useState("");
-  const [day, setDay] = useState("Mon");
-  const source=useSelector((store)=>store.flight.sourceSelectedAirport);
-  const destination=useSelector((store)=>store.flight.destinationSelectedAirport);
+  // const [day, setDay] = useState("Mon");
+  const source = useSelector((store) => store.flight.sourceSelectedAirport);
+  const destination = useSelector(
+    (store) => store.flight.destinationSelectedAirport
+  );
   // console.log(selectedAirport);
   const [airports, setAirports] = useState([]);
-  const dispatch=useDispatch();
-  const sourceRef=useRef();
-  const destinationRef=useRef();
+  const [depatureDate, setDepartureDate] = useState(new dayjs());
+  const [day,setDay]=useState("Mon");
+  const dispatch = useDispatch();
+  const sourceRef = useRef();
+  const destinationRef = useRef();
+  const navigate = useNavigate();
+
+  // console.log(day);
 
   const getAllAirports = async () => {
     const apiUrl = baseUrl + "airport";
@@ -44,14 +63,31 @@ const Flight_Page = () => {
     console.log(jsonData.data.airports);
   };
 
-  useEffect(() => {
-    getAllAirports();
-  }, []);
+  const handleDateChange = (date) => {
+    setDepartureDate(date)
+
+    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayOfWeek = weekDays[new dayjs(depatureDate).day()];
+    setDay(dayOfWeek);
+    dispatch(setSelectedDay(dayOfWeek));
+  };
+
   
+
   const handleSearchClick = async () => {
+    if(source === destination){
+      window.alert("Source and Destination can not be same.");
+      return;
+    }
+    // const from = sourceRef.current.value.slice(0, 3);
+    // const to = destinationRef.current.value.slice(0, 3);
+    // dispatch(setSourceSelectedAirport(from));
+    // dispatch(setDestinationSelectedAirport(to));
+    console.log(source);
+    console.log(destination);
     const apiUrl =
       baseUrl +
-      `flight?search={"source":"${source}","destination":"${destination}"}&day=${day}`;
+      `flight?search={"source":"${source}","destination":"${destination}"}&day=${day}&limit=1000`;
     // const apiUrl=baseUrl+`airport?search={"city":"mumbai"}`;
     const response = await fetch(apiUrl, {
       method: "GET",
@@ -61,6 +97,9 @@ const Flight_Page = () => {
     });
     const jsonData = await response.json();
     console.log(jsonData);
+    if (response.ok) {
+      navigate("/flightsearch");
+    }
   };
 
   const handleExchange = () => {
@@ -74,18 +113,26 @@ const Flight_Page = () => {
     console.log(e.target.value);
   };
 
-  const handleFromClick=()=>{
-    dispatch(setSourceSelectedAirport(sourceRef.current.value.slice(0,3)));
-    // console.log(sourceSelectedAirport);
-    // console.log(sourceRef.current.value.slice(0,3));
-    console.log(source);
-  }
+  const handleFromClick = () => {
+    let from = sourceRef.current.value.slice(0, 3);
+    // console.log(sourceRef.current.value.split("-")[1]);
+    dispatch(setSourceAirport(sourceRef.current.value.split("-")[1]));
+    dispatch(setSourceSelectedAirport(from));
+    
+  };
 
-  const handleToClick=()=>{
-    dispatch(setDestinationSelectedAirport(destinationRef.current.value.slice(0,3)));
+  const handleToClick = () => {
+    let to = destinationRef.current.value.slice(0, 3);
+    // console.log(to);
+    dispatch(setDestinationAirport(destinationRef.current.value.split("-")[1]));
+    dispatch(setDestinationSelectedAirport(to));
     // console.log(destinationRef.current.value.slice(0,3));
-    console.log(destination);
-  }
+    // console.log(destination);
+  };
+
+  useEffect(() => {
+    getAllAirports();
+  }, []);
 
   return (
     <div className="-z-50">
@@ -95,15 +142,49 @@ const Flight_Page = () => {
           Domestic and International Flights
         </h1>
         <div className="rounded-lg flex flex-col  bg-white shadow-md h-52 relative z-20">
+          <div className="p-2 flex gap-2 font-medium text-gray-600">
+            <div className="flex gap-1 bg-blue-100 rounded-2xl p-2">
+              <input type="radio" name="radio" id="one" checked />
+              <label htmlFor="one">One way</label>
+            </div>
+            <div className="flex gap-1 p-2 cursor-not-allowed">
+              <input
+                type="radio"
+                name="radio"
+                id="round"
+                disabled
+                className="cursor-not-allowed"
+              />
+              <label htmlFor="round" className="cursor-not-allowed">
+                Round Trip
+              </label>
+            </div>
+            <div className="flex gap-1 p-2 cursor-not-allowed">
+              <input
+                type="radio"
+                name="radio"
+                id="multi"
+                disabled
+                className="cursor-not-allowed"
+              />
+              <label htmlFor="multi" className="cursor-not-allowed">
+                Multi City
+              </label>
+            </div>
+          </div>
           <div className="flex gap-4 p-2">
-            {/* <TextField
-              label="From"
-              value={source}
-              onChange={(e) => setSource(e.target.value)}
-            /> */}
-            <select name="" id="" className="w-auto border p-2 rounded-lg" onChange={handleFromClick} ref={sourceRef}>
-              {airports.map(airport=><option key={airport._id} >{`${airport.iata_code}-${airport.name}`}</option>)}
-
+            <select
+              name=""
+              id=""
+              className="w-auto border p-2 rounded-lg"
+              onChange={handleFromClick}
+              ref={sourceRef}
+            >
+              {airports.map((airport) => (
+                <option
+                  key={airport._id}
+                >{`${airport.iata_code}-${airport.name}`}</option>
+              ))}
             </select>
             {/* <div
               className="h-10 w-10 rounded-full self-center -mx-6 border border-gray-300 cursor-pointer 
@@ -117,28 +198,45 @@ const Flight_Page = () => {
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
             /> */}
-            <select name="" id="" className="w-auto border rounded-lg p-2" onChange={handleToClick} ref={destinationRef}>
-              {airports.map(airport=><option key={airport._id}>{`${airport.iata_code}-${airport.name}`}</option>)}
-
+            <select
+              name=""
+              id=""
+              className="w-auto border rounded-lg p-2"
+              onChange={handleToClick}
+              ref={destinationRef}
+            >
+              {airports.map((airport) => (
+                <option
+                  key={airport._id}
+                >{`${airport.iata_code}-${airport.name}`}</option>
+              ))}
             </select>
-            {/* <FormControl>
-              <InputLabel htmlFor="label-for-select">Day</InputLabel>
-              <Select
-                labelId="label-for-select"
-                value={day}
-                label="Day"
-                onChange={handleDaySelect}
-              >
-                <MenuItem value={"Mon"}>Mon</MenuItem>
-                <MenuItem value={"Tue"}>Tue</MenuItem>
-                <MenuItem value={"Wed"}>Wed</MenuItem>
-                <MenuItem value={"Thu"}>Thu</MenuItem>
-                <MenuItem value={"Fri"}>Fri</MenuItem>
-                <MenuItem value={"Sat"}>Sat</MenuItem>
-                <MenuItem value={"Sun"}>Sun</MenuItem>
-              </Select>
-            </FormControl> */}
-            {/* <DatePicker label="Choose Date" /> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Choose Date"
+                disablePast
+                reduceAnimations
+                minDate={new dayjs()}
+                maxDate={new dayjs().add(-1, "day").add(1, "year")}
+                value={depatureDate}
+                onChange={(date) => handleDateChange(date)}
+              />
+            </LocalizationProvider>
+            {/* <LocalizationProvider dateAdapter={DateAdapter}>
+            <DatePicker label="Choose Date" 
+            sx={{ width: 200 }}
+						slotProps={{
+							textField: {
+								variant: "standard",
+								InputLabelProps: { shrink: true },
+							},
+						}}
+						format="DD MMM, dddd"
+						disablePast
+						reduceAnimations
+						/>
+            </LocalizationProvider> */}
           </div>
 
           {/* <div className="w-[96%] border border-gray-300 m-2 p-1 rounded-lg flex">

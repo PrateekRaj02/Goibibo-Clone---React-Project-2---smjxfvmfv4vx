@@ -7,19 +7,19 @@ import hotel from "../../assets/hotel.png";
 import train from "../../assets/train.png";
 import bus from "../../assets/bus.png";
 import manage from "../../assets/manage.png";
-import Login from "../login/Login";
 import {useDispatch,useSelector} from "react-redux";
-import {setIsLoginPopup} from "../../utils/redux/authSlice";
+import {setShowLoginSignupForm} from "../../utils/redux/authSlice";
 import { Link } from "react-router-dom";
+import LoginSignupForm from "../login/LoginSignupForm";
 
 
 const Navbar = () => {
   const [activeTab,setActiveTab]=useState(1);
-  const isLoginPopup=useSelector((store)=>store.auth.isLoginPopup);
+  const showLoginSignupForm=useSelector((store)=>store.auth.showLoginSignupForm);
   const dispatch=useDispatch();
 
   const handleLoginClick=()=>{
-    dispatch(setIsLoginPopup(true))
+    dispatch(setShowLoginSignupForm(true))
   }
 
   return (
@@ -50,7 +50,7 @@ const Navbar = () => {
       <button className="border border-blue-500 rounded-lg py-2 px-4 text-blue-500 mr-5 " onClick={handleLoginClick}>
         <AccountCircleIcon /> LOGIN / SIGNUP
       </button>
-      {isLoginPopup && <Login/>}
+      {showLoginSignupForm && <LoginSignupForm/>}
     </div>
   );
 };
