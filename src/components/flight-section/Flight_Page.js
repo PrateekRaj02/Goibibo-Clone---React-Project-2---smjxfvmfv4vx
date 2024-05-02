@@ -20,6 +20,7 @@ import {
   setSelectedDay,
   setSourceAirport,
   setSourceSelectedAirport,
+  setSourceCity,setDestinationCity
 } from "../../utils/redux/flightSlice";
 import Autocomplete from "@mui/material/Autocomplete";
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -83,8 +84,8 @@ const Flight_Page = () => {
     // const to = destinationRef.current.value.slice(0, 3);
     // dispatch(setSourceSelectedAirport(from));
     // dispatch(setDestinationSelectedAirport(to));
-    console.log(source);
-    console.log(destination);
+    // console.log(source);
+    // console.log(destination);
     const apiUrl =
       baseUrl +
       `flight?search={"source":"${source}","destination":"${destination}"}&day=${day}&limit=1000`;
@@ -96,7 +97,7 @@ const Flight_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       navigate("/flightsearch");
     }
@@ -110,11 +111,14 @@ const Flight_Page = () => {
 
   const handleDaySelect = (e) => {
     setDay(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleFromClick = () => {
     let from = sourceRef.current.value.slice(0, 3);
+    let fromCity=sourceRef.current.value.split(", ")[1];
+    dispatch(setSourceCity(fromCity));
+    // console.log(fromCity);
     // console.log(sourceRef.current.value.split("-")[1]);
     dispatch(setSourceAirport(sourceRef.current.value.split("-")[1]));
     dispatch(setSourceSelectedAirport(from));
@@ -123,6 +127,9 @@ const Flight_Page = () => {
 
   const handleToClick = () => {
     let to = destinationRef.current.value.slice(0, 3);
+    let toCity=destinationRef.current.value.split(", ")[1];
+    dispatch(setDestinationCity(toCity));
+    // console.log(toCity);
     // console.log(to);
     dispatch(setDestinationAirport(destinationRef.current.value.split("-")[1]));
     dispatch(setDestinationSelectedAirport(to));
@@ -176,14 +183,14 @@ const Flight_Page = () => {
             <select
               name=""
               id=""
-              className="w-auto border p-2 rounded-lg"
+              className="w-[40%] border p-2 rounded-lg"
               onChange={handleFromClick}
               ref={sourceRef}
             >
               {airports.map((airport) => (
                 <option
                   key={airport._id}
-                >{`${airport.iata_code}-${airport.name}`}</option>
+                >{`${airport.iata_code}-${airport.name}, ${airport.city}`}</option>
               ))}
             </select>
             {/* <div
@@ -201,14 +208,14 @@ const Flight_Page = () => {
             <select
               name=""
               id=""
-              className="w-auto border rounded-lg p-2"
+              className="w-[40%] border rounded-lg p-2"
               onChange={handleToClick}
               ref={destinationRef}
             >
               {airports.map((airport) => (
                 <option
                   key={airport._id}
-                >{`${airport.iata_code}-${airport.name}`}</option>
+                >{`${airport.iata_code}-${airport.name}, ${airport.city}`}</option>
               ))}
             </select>
 

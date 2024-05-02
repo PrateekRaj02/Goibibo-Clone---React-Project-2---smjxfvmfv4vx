@@ -1,4 +1,4 @@
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -15,21 +15,25 @@ import Typography from "@mui/material/Typography";
 import { BiSolidError } from "react-icons/bi";
 import React, { useEffect, useRef, useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
-import Travellers from "./Travellers"
+import Travellers from "./Travellers";
+import { setAmount } from "../../utils/redux/paymentSlice";
+import { useDispatch } from "react-redux";
 
-const Booking_Page = () => {
-  const { type, data } = useParams();
+const Train_Booking_Page = () => {
+  const { data } = useParams();
   const details = JSON.parse(decodeURIComponent(data));
+  //   console.log(details);
   const nameRef = useRef();
   const ageRef = useRef();
   const pincodeRef = useRef();
   const contactEmailRef = useRef();
-  const addressRef=useRef();
-  const fare=details.fare;
+  const addressRef = useRef();
+  const fare = details.fare;
   const [gender, setGender] = useState("male");
   const [travellers, setTravellers] = useState([]);
-  const navigate=useNavigate();
-  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [errorMesaage, setErrorMessage] = useState("");
   // console.log(details);
@@ -72,6 +76,7 @@ const Booking_Page = () => {
     ageRef.current.value = "";
     setGender("male");
   }
+
   function isValidPincode(code) {
     return code.length == 6 && code[0] != "0";
   }
@@ -79,7 +84,7 @@ const Booking_Page = () => {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
   }
-  function isValidAddress(address){
+  function isValidAddress(address) {
     return address.length > 0;
   }
 
@@ -110,7 +115,7 @@ const Booking_Page = () => {
       return;
     }
     // setPaymentisPending(true);
-    // setAmount(getTotalFare());
+    dispatch(setAmount(getTotalFare()));
     navigate("/payment");
     // setBookingFunction({
     //   bookingFunction: bookBus.bind(null, bus_id, depDate, arrDate),
@@ -163,16 +168,37 @@ const Booking_Page = () => {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
+              <Typography fontWeight={600}>{details.coachType}</Typography>
+              <Typography
+                sx={{
+                  color: "#559b09",
+                  bgcolor: "rgba(85,155,9,.08)",
+                  p: 0.75,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  border: "1px solid rgba(85,155,9,.4)",
+                  borderRadius: "4px",
+                }}
+              >
+                AVL {details.numberOfSeats}
+              </Typography>
+            </Stack>
+            <Divider orientation="horizontal" />
+            <Stack
+              direction={"row"}
+              sx={{ width: "100%", p: 2 }}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
               <Typography fontWeight={600}>₹{details.fare} per seat</Typography>
-              <Typography>{details.seats} Seats Available</Typography>
             </Stack>
             <Divider orientation="horizontal" />
             <Stack sx={{ p: 2 }} gap={1}>
-              <Typography fontSize={13} fontWeight={300}>
-                {/* {getDateToString(depDate)} */}
-              </Typography>
+              {/* <Typography fontSize={13} fontWeight={300}>
+                {getDateToString(details.departureDate)}
+              </Typography> */}
               <Typography fontSize={17} fontWeight={600}>
-                {details.name}
+                {details.trainNumber} {details.trainName}
               </Typography>
               <Stack
                 direction={"row"}
@@ -295,41 +321,7 @@ const Booking_Page = () => {
                   />
                 </RadioGroup>
               </FormControl>
-              {/* <Autocomplete
-                disableClearable
-                options={COUNTRIES}
-                getOptionLabel={(option) => option}
-                value={COUNTRIES[tempNationality]}
-                onChange={(e, v) => {
-                  setAnchorEl(null);
-                  setTempNationality(
-                    v ? COUNTRIES.findIndex((item) => item === v) : null
-                  );
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    sx={{
-                      width: 320,
-                    }}
-                    inputRef={nationalityRef}
-                    variant="standard"
-                    label="Nationality"
-                    InputLabelProps={{
-                      shrink: true,
-                      style: {
-                        color: "rgba(0,0,0,.38)",
-                      },
-                    }}
-                    placeholder="Select Country"
-                  />
-                )}
-                sx={{
-                  "& input": {
-                    fontSize: 14,
-                  },
-                }}
-              /> */}
+              
               <Button
                 disableRipple
                 variant="contained"
@@ -441,7 +433,6 @@ const Booking_Page = () => {
                 inputRef={contactEmailRef}
                 onChange={() => setAnchorEl(null)}
               />
-              
             </Stack>
           </Stack>
         </Box>
@@ -486,4 +477,4 @@ const Booking_Page = () => {
   );
 };
 
-export default Booking_Page;
+export default Train_Booking_Page;

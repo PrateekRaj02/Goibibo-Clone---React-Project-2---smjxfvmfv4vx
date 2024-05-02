@@ -24,13 +24,13 @@ const Bus_Page = () => {
 
   const handleFromChange = () => {
     const from = fromRef.current.value;
-    console.log(from);
+    // console.log(from);
     dispatch(setSource(from));
   };
 
   const handleToChange = () => {
     const to = toRef.current.value;
-    console.log(to);
+    // console.log(to);
     dispatch(setDestination(to));
   };
 
@@ -55,7 +55,7 @@ const Bus_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if(response.ok){
       navigate("/bussearch");
     }
@@ -70,7 +70,7 @@ const Bus_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData.data.cities);
+    // console.log(jsonData.data.cities);
     setCity(jsonData.data.cities);
   };
   useEffect(() => {

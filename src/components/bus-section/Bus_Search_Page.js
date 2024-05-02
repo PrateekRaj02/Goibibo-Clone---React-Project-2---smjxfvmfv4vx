@@ -22,7 +22,7 @@ const Bus_Search_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       setBuses(jsonData.data.buses);
     }

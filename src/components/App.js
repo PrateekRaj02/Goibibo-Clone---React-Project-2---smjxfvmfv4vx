@@ -10,8 +10,11 @@ import Hotel_Search_Page from "./hotel-section/Hotel_Search_Page";
 import Hotel_Detail from "./hotel-section/Hotel_Detail";
 import Train_Search_Page from "./train-section/Train_Search_Page";
 import Bus_Search_Page from "./bus-section/Bus_Search_Page";
-import Booking_Page from "./checkout/Booking_Page";
 import Payment from "./payment/Payment";
+import Bus_Booking_Page from "./checkout/Bus_Booking_Page";
+import Train_Booking_Page from "./checkout/Train_Booking_Page";
+import Flight_Booking_Page from "./checkout/Flight_Booking_Page";
+import Hotel_Booking_Page from "./checkout/Hotel_Booking_Page";
 
 function App() {
   return (
@@ -65,8 +68,20 @@ export const appRouter = createBrowserRouter([
         element:<Bus_Search_Page/>
       },
       {
-        path:"/booking/:type/:data",
-        element:<Booking_Page/>
+        path:"/booking/bus/:data",
+        element:<Bus_Booking_Page/>
+      },
+      {
+        path:"/booking/train/:data",
+        element:<Train_Booking_Page/>
+      },
+      {
+        path:"/booking/flight/:data",
+        element:<Flight_Booking_Page/>
+      },
+      {
+        path:"/booking/hotel/:data",
+        element:<Hotel_Booking_Page/>
       },
       {
         path:"/payment",

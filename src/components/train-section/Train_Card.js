@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import {useNavigate} from "react-router-dom";
 
 function getDateString(dateObj) {
   return `${dateObj.format("ddd")}, ${dateObj.format("D")} ${dateObj.format(
@@ -33,7 +34,8 @@ export default function Train_Card({
     trainType,
     travelDuration,
   } = train;
-  
+  const navigate=useNavigate();
+
   function getColor(day) {
     if (daysOfOperation.includes(day)) return "rgba(0,0,0,.87)";
     else return "rgba(0,0,0,0.2)";
@@ -51,30 +53,42 @@ export default function Train_Card({
 
   function getFare(type, baseFare) {
     switch (type) {
-        case "CC":
-            return Math.round(baseFare * 2);
-        case "2S":
-            return Math.round(baseFare * 0.75);
-        case "SL":
-            return Math.round(baseFare);
-        case "1A":
-            return Math.round(baseFare * 6.25);
-        case "2A":
-            return Math.round(baseFare * 3.5);
-        case "3A":
-            return Math.round(baseFare * 2.75);
-        case "3E":
-            return Math.round(baseFare * 1.75);
-        case "EA":
-            return Math.round(baseFare * 5);
+      case "CC":
+        return Math.round(baseFare * 2);
+      case "2S":
+        return Math.round(baseFare * 0.75);
+      case "SL":
+        return Math.round(baseFare);
+      case "1A":
+        return Math.round(baseFare * 6.25);
+      case "2A":
+        return Math.round(baseFare * 3.5);
+      case "3A":
+        return Math.round(baseFare * 2.75);
+      case "3E":
+        return Math.round(baseFare * 1.75);
+      case "EA":
+        return Math.round(baseFare * 5);
     }
     return baseFare;
-}
-
-  const handleBook=()=>{
-
   }
 
+  const handleBook = (coachType, numberOfSeats) => {
+    const data = {
+      coachType,
+      numberOfSeats,
+      fare,
+      source,
+      trainName,
+      trainNumber,
+      departureTime,
+      destination,
+      arrivalTime,
+      departureDate
+    };
+    const encodedTrainDetails = encodeURIComponent(JSON.stringify(data));
+    navigate(`/booking/train/${encodedTrainDetails}`);
+  };
 
   return (
     <Stack
@@ -361,7 +375,7 @@ function DropDownCard({ date, coaches, id, handleBook }) {
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
             }}
-            onClick={() => handleBook(id, coachType)}
+            onClick={() => handleBook(coachType, numberOfSeats)}
           >
             BOOK
           </Button>

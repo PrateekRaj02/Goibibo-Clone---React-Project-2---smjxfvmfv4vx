@@ -5,6 +5,7 @@ const flightSlice=createSlice({
     initialState:{
         sourceSelectedAirport:"HYD",
         sourceAirport:"Rajiv Gandhi International Airport",
+        sourceCity:"Hyderabad",
         // sourceSelectedAirport:{
         //     additional_info:{
         //         elevation:617,
@@ -24,6 +25,7 @@ const flightSlice=createSlice({
         // },
         destinationSelectedAirport:"AMD",
         destinationAirport:"Sardar Vallabhbhai Patel International Airport",
+        destinationCity:"Ahmedabad",
         // destinationSelectedAirport:{
         //     additional_info:{
         //         elevation:55,
@@ -59,11 +61,17 @@ const flightSlice=createSlice({
         },
         setDestinationAirport:(state,action)=>{
             state.destinationAirport=action.payload;
+        },
+        setSourceCity:(state,action)=>{
+            state.sourceCity=action.payload;
+        },
+        setDestinationCity:(state,action)=>{
+            state.destinationCity=action.payload;
         }
     }
 
 })
 
-export const {setSourceSelectedAirport,setDestinationSelectedAirport,setSelectedDay,setSourceAirport,setDestinationAirport}=flightSlice.actions;
+export const {setSourceSelectedAirport,setDestinationSelectedAirport,setSelectedDay,setSourceAirport,setDestinationAirport,setSourceCity,setDestinationCity}=flightSlice.actions;
 
 export default flightSlice.reducer;

@@ -105,17 +105,10 @@ export default function Hotel_Detail() {
       location: hotel.location,
       image: hotel.images[0],
       roomtype,
+      fare:costPerNight,
     };
-    let url = `/hotels/booking/${hotelID}?checkin=${checkindate.toJSON()}&checkout=${checkoutdate.toJSON()}&rooms=${rooms}&guests=${guests}&cost=${costPerNight}&hotel=${JSON.stringify(
-      hotelData
-    )}`;
-    // if (!isLoggedIn) {
-    //   setShowLoginSignupForm(true);
-    //   setRedirect(true);
-    //   setRedirectTo(url);
-    //   return;
-    // }
-    navigate(url);
+    const encodedHotelDetails = encodeURIComponent(JSON.stringify(hotelData));
+    navigate(`/booking/hotel/${encodedHotelDetails}`);
   }
 
   const getHotelData = async () => {
@@ -127,7 +120,7 @@ export default function Hotel_Detail() {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       setHotel(jsonData.data);
       setIsLoading(false);

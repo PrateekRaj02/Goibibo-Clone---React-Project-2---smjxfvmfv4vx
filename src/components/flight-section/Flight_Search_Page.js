@@ -14,9 +14,9 @@ const Flight_Search_Page = () => {
   );
   const day = useSelector((store) => store.flight.day);
   const [flights, setFlights] = useState([]);
-  console.log(source);
-  console.log(destination);
-  console.log(day);
+  // console.log(source);
+  // console.log(destination);
+  // console.log(day);
 
   const getAllFlight = async () => {
     const apiUrl =
@@ -30,7 +30,7 @@ const Flight_Search_Page = () => {
     });
     const jsonData = await response.json();
     setFlights(jsonData.data.flights);
-    console.log(jsonData);
+    // console.log(jsonData);
   };
   useEffect(() => {
     getAllFlight();

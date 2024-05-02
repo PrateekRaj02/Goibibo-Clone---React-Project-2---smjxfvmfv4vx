@@ -4,6 +4,7 @@ import flightReducer from "./flightSlice";
 import hotelReducer from "./hotelSlice";
 import trainReducer from "./trainSlice";
 import busReducer from "./busSlice";
+import paymentReducer from "./paymentSlice";
 
 const store=configureStore({
     reducer:{
@@ -12,6 +13,7 @@ const store=configureStore({
         hotel:hotelReducer,
         train:trainReducer,
         bus:busReducer,
+        payment:paymentReducer,
     }
 })
 

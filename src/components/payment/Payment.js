@@ -19,13 +19,13 @@ import {
 //   import { usePaymentContext } from "../../../Contexts/PaymentContextProvider";
   import BookingModal from "./BookingModal";
   import { Link, useNavigate } from "react-router-dom";
-
+  import {useSelector} from "react-redux"
   import UpiTab from "./UpiTab";
   
   export default function Payment() {
     // const { bookingFunction, paymentIsPending, setPaymentisPending, amount } =
     //   usePaymentContext();
-    const amount=2000;
+    const amount=useSelector((store)=>store.payment.amount);
     const navigate = useNavigate();
     const [time, setTime] = useState(300);
     const [tabIndex, setTabIndex] = useState(0);

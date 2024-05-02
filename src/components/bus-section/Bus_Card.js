@@ -59,7 +59,7 @@ export default function Bus_Card({ busDetails, departureDate }) {
   const handleBook=()=>{
     const encodedBusDetails = encodeURIComponent(JSON.stringify(busDetails));
     navigate(`/booking/bus/${encodedBusDetails}`);
-    
+  
   }
 
   return (
