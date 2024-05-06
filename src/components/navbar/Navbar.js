@@ -8,15 +8,28 @@ import train from "../../assets/train.png";
 import bus from "../../assets/bus.png";
 import manage from "../../assets/manage.png";
 import {useDispatch,useSelector} from "react-redux";
-import {setShowLoginSignupForm} from "../../utils/redux/authSlice";
-import { Link } from "react-router-dom";
+import {setIsLoggedIn, setShowLoginSignupForm} from "../../utils/redux/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 import LoginSignupForm from "../login/LoginSignupForm";
 
 
 const Navbar = () => {
+  const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
   const [activeTab,setActiveTab]=useState(1);
   const showLoginSignupForm=useSelector((store)=>store.auth.showLoginSignupForm);
   const dispatch=useDispatch();
+  const navigate=useNavigate();
+
+  const handleTripClick=()=>{
+    if(isLoggedIn){
+      navigate("/mytrips")
+    }
+  }
+  const handleLogoutClick=()=>{
+    localStorage.setItem("token", null);
+localStorage.setItem("userDetails", null);
+dispatch(setIsLoggedIn(false));
+ }
 
   const handleLoginClick=()=>{
     dispatch(setShowLoginSignupForm(true))
@@ -42,14 +55,15 @@ const Navbar = () => {
         <img src={bus} alt="plane" className="h-5" />
           Bus
         </Link>
-        <li className="cursor-pointer px-2 py-3 font-bold flex items-center gap-1 text-gray-500">
+        <div className={`${isLoggedIn ? "cursor-pointer":"cursor-not-allowed"} px-2 py-3 font-bold flex items-center gap-1 text-gray-500 ${activeTab === 5 && 'border-b-2 border-sky-500'}`} onClick={handleTripClick}>
         <img src={manage} alt="plane" className="h-6" />
           Manage Booking (My Trips)
-        </li>
+        </div>
       </ul>
-      <button className="border border-blue-500 rounded-lg py-2 px-4 text-blue-500 mr-5 " onClick={handleLoginClick}>
+      
+      {isLoggedIn == false ?(<button className="border border-blue-500 rounded-lg py-2 px-4 text-blue-500 mr-5 " onClick={handleLoginClick}>
         <AccountCircleIcon /> LOGIN / SIGNUP
-      </button>
+      </button>) : (<button className="border border-blue-500 rounded-lg py-2 px-4 text-blue-500 mr-5 " onClick={handleLogoutClick}><AccountCircleIcon /> Signout</button>)}
       {showLoginSignupForm && <LoginSignupForm/>}
     </div>
   );

@@ -74,8 +74,9 @@ import Typography from "@mui/material/Typography";
 import loginSignupImg from "../../assets/login-signup-banner.png";
 import { BiSolidError } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
-import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
+import { setIsLoggedIn, setShowLoginSignupForm, setToken, setUserDetails } from "../../utils/redux/authSlice";
 import { baseUrl, projectId } from "../../utils/constant";
+
 
 const style = {
   position: "absolute",
@@ -130,6 +131,7 @@ function LogInTab() {
   const loginEmailRef = useRef();
   const loginPasswordRef = useRef();
   const loginButtonRef = useRef();
+  // const [user,setUser]=useState({name:"user",email:"user@gmail.com"});
   async function handleLoginButton(e) {
     e.preventDefault();
     if (loginEmailRef.current.value === "") {
@@ -150,10 +152,6 @@ function LogInTab() {
       setAnchorEl(loginPasswordRef.current);
       return;
     }
-    const user = {
-      email: loginEmailRef.current.value,
-      password: loginPasswordRef.current.value,
-    };
     const body = {
       email: loginEmailRef.current.value,
       password: loginPasswordRef.current.value,
@@ -171,14 +169,20 @@ function LogInTab() {
     const jsonData = await response.json();
     console.log(jsonData);
     if (response.ok) {
+      dispatch(setUserDetails(JSON.stringify({ name: jsonData.data.user.name, email: jsonData.data.user.email })))
+      // setUser({ name: jsonData.data.user.name, email: jsonData.data.user.email });
       dispatch(setShowLoginSignupForm(false));
-    } else {
-      if (response && response.message == "Incorrect EmailId or Password") {
-        setErrorMessage("Incorrect EmailId or Password");
-        setAnchorEl(loginButtonRef.current);
-        return;
-      }
+      dispatch(setIsLoggedIn(true));
+      dispatch(setToken(jsonData.token));
+      // window.localStorage.setItem("userDetails",JSON.stringify(user));
+    } else{
+      setErrorMessage("Incorrect EmailId or Password");
+      setAnchorEl(loginButtonRef.current);
+      return;
     }
+    
+      
+    
     //  logIn(user).then((res) => {
     //    if (res && res.message == "Incorrect EmailId or Password") {
     //      setErrorMessage("Incorrect EmailId or Password");
@@ -333,13 +337,16 @@ function SignUpTab() {
     const jsonData = await response.json();
     console.log(jsonData);
     if (response.ok) {
+      dispatch(setUserDetails(JSON.stringify({ name: jsonData.data.user.name, email: jsonData.data.user.email })))
       dispatch(setShowLoginSignupForm(false));
+      dispatch(setIsLoggedIn(true));
+      dispatch(setToken(jsonData.token));
     } else {
-      if (response && response.message == "User already exists") {
+     
         setErrorMessage("Account already exists on this email! Please Login.");
         setAnchorEl(signupEmailRef.current);
         return;
-      }
+      
     }
     //  signUp(user).then((res) => {
     //    if (res && res.message == "User already exists") {

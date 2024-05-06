@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {useSelector,useDispatch} from "react-redux"
-import { setSelectedCity } from "../../utils/redux/hotelSlice";
+import { setCheckInDate, setCheckOutDate, setSelectedCity } from "../../utils/redux/hotelSlice";
 import {useNavigate} from "react-router-dom";
 
 const Hotel_Page = () => {
@@ -35,6 +35,16 @@ const Hotel_Page = () => {
     let ci=cityRef.current.value.split(",")[0];
     console.log(ci);
     dispatch(setSelectedCity(ci));
+  }
+
+  const handleCheckIn=(date)=>{
+    dispatch(setCheckInDate(date));
+
+  }
+
+  const handleCheckOut=(date)=>{
+    dispatch(setCheckOutDate(date));
+
   }
 
   const handleClick=async ()=>{
@@ -95,7 +105,7 @@ const Hotel_Page = () => {
               minDate={new dayjs()}
               maxDate={new dayjs().add(-1, "day").add(1, "year")}
               value={new dayjs()}
-              // onChange={(date)=>setDepartureDate(date)}
+              onChange={(date)=>handleCheckIn(date)}
             />
           </LocalizationProvider>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,7 +116,7 @@ const Hotel_Page = () => {
               minDate={new dayjs()}
               maxDate={new dayjs().add(-1, "day").add(1, "year")}
               value={new dayjs()}
-              // onChange={(date)=>setDepartureDate(date)}
+              onChange={(date)=>handleCheckOut(date)}
             />
           </LocalizationProvider>
           </div>

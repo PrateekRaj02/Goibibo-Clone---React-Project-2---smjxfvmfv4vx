@@ -18,15 +18,23 @@ import {
   import inputCard from "../../assets/payment/jp_default_card.png";
 //   import { usePaymentContext } from "../../../Contexts/PaymentContextProvider";
   import BookingModal from "./BookingModal";
-  import { Link, useNavigate } from "react-router-dom";
-  import {useSelector} from "react-redux"
+  import { Link, useNavigate, useParams } from "react-router-dom";
+  import {useDispatch, useSelector} from "react-redux"
   import UpiTab from "./UpiTab";
+import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
+import { baseUrl, projectId } from "../../utils/constant";
   
   export default function Payment() {
     // const { bookingFunction, paymentIsPending, setPaymentisPending, amount } =
     //   usePaymentContext();
+    const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
     const amount=useSelector((store)=>store.payment.amount);
     const navigate = useNavigate();
+    const { body } = useParams();
+    const details = JSON.parse(decodeURIComponent(body));
+    console.log(details);
+    const token=JSON.parse(window.localStorage.getItem("token"))
+    console.log(token);
     const [time, setTime] = useState(300);
     const [tabIndex, setTabIndex] = useState(0);
     const [bookingWait, setBookingWait] = useState({
@@ -46,6 +54,7 @@ import {
     const [cvv, setCvv] = useState("");
     const [cvvHasError, setCvvHasError] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const dispatch=useDispatch();
     if (time === 0) {
       if (!showErrorModal) {
         setShowErrorModal(true);
@@ -62,6 +71,18 @@ import {
       setBookingWait((prev) => {
         return { ...prev, message: "Booking successful", recieved: true };
       });
+      const apiUrl=baseUrl+`booking`;
+      const response=await fetch(apiUrl,{
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+ projectID: `${projectId}`
+        },
+        body:JSON.stringify(details),
+      });
+      const jsonData=await response.json();
+      console.log(jsonData);
     }
     const CURRENCY_FORMATTER = (value) =>
 	new Intl.NumberFormat("en-IN", {
@@ -160,6 +181,12 @@ import {
         unLoad();
       };
     }, []);
+    useEffect(()=>{
+      if(!isLoggedIn){
+        navigate("/");
+        dispatch(setShowLoginSignupForm(true))
+      }
+    },[isLoggedIn])
     const mins = ("" + Math.floor(time / 60)).padStart(2, "0");
     const secs = ("" + (time % 60)).padStart(2, "0");
     return (

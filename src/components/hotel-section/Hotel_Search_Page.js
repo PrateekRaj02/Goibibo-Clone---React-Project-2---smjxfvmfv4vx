@@ -6,6 +6,7 @@ import Hotel_Card from "./Hotel_Card";
 const Hotel_Search_Page = () => {
   const selectedCity = useSelector((store) => store.hotel.selectedCity);
   const checkinDate=useSelector((store)=>store.hotel.checkinDate);
+  const checkoutDate=useSelector((store)=>store.hotel.checkoutDate);
   const [hotelData, setHotelData] = useState([]);
 
   const getHotelsData = async () => {
@@ -112,6 +113,7 @@ const Hotel_Search_Page = () => {
                   key={hotel._id}
                   hotelData={hotel}
                   checkinDate={checkinDate}
+                  checkoutDate={checkoutDate}
                 />
               );
             })}

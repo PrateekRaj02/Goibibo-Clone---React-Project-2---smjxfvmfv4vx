@@ -62,6 +62,15 @@ export default function Hotel_Detail() {
   const checkindate = useSelector((store) => store.hotel.checkinDate);
 
   const checkoutdate = useSelector((store) => store.hotel.checkoutDate);
+  const departureTime="12:00";
+  const arrivalTime="06:00";
+  // console.log(checkindate+" "+checkoutdate);
+  const depHour = +departureTime.slice(0, 2);
+  const depMin = +departureTime.slice(3, 5);
+  const depDate = new dayjs(checkindate).hour(depHour).minute(depMin);
+  const arrHour= +arrivalTime.slice(0,2);
+  const arrMin= +arrivalTime.slice(3,5);
+  const arrDate = new dayjs(checkoutdate).hour(arrHour).minute(arrMin);
   const [rooms, setRooms] = useState(1);
   const [guests, setGuests] = useState(2);
   const params = useParams();
@@ -106,6 +115,9 @@ export default function Hotel_Detail() {
       image: hotel.images[0],
       roomtype,
       fare:costPerNight,
+      depDate:`${depDate}`,
+      arrDate:`${arrDate}`,
+      _id:`${hotelID}`,
     };
     const encodedHotelDetails = encodeURIComponent(JSON.stringify(hotelData));
     navigate(`/booking/hotel/${encodedHotelDetails}`);

@@ -104,7 +104,7 @@ const Bus_Page = () => {
               })}
             </select>
 
-            <label htmlFor="p-2">To</label>
+            <label htmlFor="p-2" className="p-2">To</label>
             <select
               name=""
               id=""

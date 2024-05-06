@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 
 const flightSlice=createSlice({
     name:"flight",
@@ -43,7 +44,8 @@ const flightSlice=createSlice({
         //     __v:0,
         //     _id:"6514309e348f6fafa1b86601"
         // },
-        day:"Mon"
+        day:"Mon",
+        departureDate:new dayjs(),
     },
     reducers:{
         setSourceSelectedAirport:(state,action)=>{
@@ -67,11 +69,14 @@ const flightSlice=createSlice({
         },
         setDestinationCity:(state,action)=>{
             state.destinationCity=action.payload;
+        },
+        setDepartureDate:(state,action)=>{
+            state.departureDate=action.payload;
         }
     }
 
 })
 
-export const {setSourceSelectedAirport,setDestinationSelectedAirport,setSelectedDay,setSourceAirport,setDestinationAirport,setSourceCity,setDestinationCity}=flightSlice.actions;
+export const {setSourceSelectedAirport,setDestinationSelectedAirport,setSelectedDay,setSourceAirport,setDestinationAirport,setSourceCity,setDestinationCity,setDepartureDate}=flightSlice.actions;
 
 export default flightSlice.reducer;

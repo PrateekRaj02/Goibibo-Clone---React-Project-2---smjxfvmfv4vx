@@ -20,7 +20,8 @@ import {
   setSelectedDay,
   setSourceAirport,
   setSourceSelectedAirport,
-  setSourceCity,setDestinationCity
+  setSourceCity,setDestinationCity,
+  setDepartureDate
 } from "../../utils/redux/flightSlice";
 import Autocomplete from "@mui/material/Autocomplete";
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -31,8 +32,8 @@ import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
 
 const Flight_Page = () => {
-  const [fromOpen, setFromOpen] = useState(false);
-  const [toOpen, setToOpen] = useState(false);
+  // const [fromOpen, setFromOpen] = useState(false);
+  // const [toOpen, setToOpen] = useState(false);
   // const [source, setSource] = useState("");
   // const [destination, setDestination] = useState("");
   // const [day, setDay] = useState("Mon");
@@ -42,7 +43,7 @@ const Flight_Page = () => {
   );
   // console.log(selectedAirport);
   const [airports, setAirports] = useState([]);
-  const [depatureDate, setDepartureDate] = useState(new dayjs());
+  const [depDate, setDepDate] = useState(new dayjs());
   const [day,setDay]=useState("Mon");
   const dispatch = useDispatch();
   const sourceRef = useRef();
@@ -65,10 +66,11 @@ const Flight_Page = () => {
   };
 
   const handleDateChange = (date) => {
-    setDepartureDate(date)
+    setDepDate(date);
+    dispatch(setDepartureDate(date));
 
     const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const dayOfWeek = weekDays[new dayjs(depatureDate).day()];
+    const dayOfWeek = weekDays[new dayjs(depDate).day()];
     setDay(dayOfWeek);
     dispatch(setSelectedDay(dayOfWeek));
   };
@@ -226,7 +228,7 @@ const Flight_Page = () => {
                 reduceAnimations
                 minDate={new dayjs()}
                 maxDate={new dayjs().add(-1, "day").add(1, "year")}
-                value={depatureDate}
+                value={depDate}
                 onChange={(date) => handleDateChange(date)}
               />
             </LocalizationProvider>

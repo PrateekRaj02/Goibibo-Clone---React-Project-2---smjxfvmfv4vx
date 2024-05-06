@@ -19,7 +19,7 @@ import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import Flight_Detail from "./Flight_Detail";
 
-const Flight_Card = ({ flight, source, destination }) => {
+const Flight_Card = ({ flight, source, destination,departureDate  }) => {
   const { _id } = flight;
   let airlineImg, airlineName, flightName;
   const [detailTab, setDetailTab] = useState(0);
@@ -27,6 +27,13 @@ const Flight_Card = ({ flight, source, destination }) => {
   const [expandDetail, setExpandDetail] = useState(false);
   const navigate=useNavigate();
   const {arrivalTime,departureTime}=flight;
+  const depDate = departureDate
+    .hour(+departureTime.slice(0, 2))
+    .minute(+departureTime.slice(3, 5));
+    
+  let arrDate = depDate
+    .hour(+arrivalTime.slice(0, 2))
+    .minute(+arrivalTime.slice(3, 5));
 
   switch (flight.flightID.slice(0, 2).toUpperCase()) {
     case "6E":
@@ -75,7 +82,7 @@ const Flight_Card = ({ flight, source, destination }) => {
   };
 
   const handleBook=()=>{
-    const data={...flight, source, destination};
+    const data={...flight, source, destination,depDate,arrDate};
     const encodedFlightDetails = encodeURIComponent(JSON.stringify(data));
     navigate(`/booking/flight/${encodedFlightDetails}`);
 

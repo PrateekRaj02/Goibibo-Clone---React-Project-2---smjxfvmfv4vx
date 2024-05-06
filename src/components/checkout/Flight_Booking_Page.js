@@ -18,8 +18,10 @@ import Travellers from "./Travellers";
 import { setAmount } from "../../utils/redux/paymentSlice";
 import { useDispatch,useSelector } from "react-redux";
 import Flight_Details_Tab from "./Flight_Details_Tab";
+import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
 
 const Flight_Booking_Page = () => {
+  const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
   const { data } = useParams();
   const details = JSON.parse(decodeURIComponent(data));
     // console.log(details);
@@ -119,12 +121,29 @@ const Flight_Booking_Page = () => {
       return;
     }
     // setPaymentisPending(true);
+    const flightData={
+      "bookingType" : "flight",
+      "bookingDetails" : {
+            "flightId" : `${details._id}`,
+            "startDate" : `${details.arrDate}`,
+            "endDate" : `${details.depDate}`,
+      }
+    }
+    const encodedFlightBody = encodeURIComponent(JSON.stringify(flightData));
     dispatch(setAmount(getTotalFare()));
-    navigate("/payment");
+    navigate(`/payment/${encodedFlightBody}`);
     // setBookingFunction({
     //   bookingFunction: bookBus.bind(null, bus_id, depDate, arrDate),
     // });
   }
+
+  useEffect(()=>{
+    if(!isLoggedIn){
+      navigate("/");
+      dispatch(setShowLoginSignupForm(true))
+    }
+  },[isLoggedIn])
+
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Box

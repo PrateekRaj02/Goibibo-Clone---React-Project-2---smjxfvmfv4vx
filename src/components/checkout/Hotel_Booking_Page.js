@@ -19,9 +19,11 @@ import { setAmount } from "../../utils/redux/paymentSlice";
 import { useDispatch,useSelector } from "react-redux";
 import { PiDoorOpenDuotone } from "react-icons/pi";
 import { MdOutlinePeopleAlt } from "react-icons/md";
+import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
 
 
 const Hotel_Booking_Page = () => {
+  const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
   const { data } = useParams();
   const details = JSON.parse(decodeURIComponent(data));
     console.log(details);
@@ -119,13 +121,28 @@ const Hotel_Booking_Page = () => {
       setErrorMessage("Please Enter Address!");
       return;
     }
-    // setPaymentisPending(true);
+    const hotelData={
+      "bookingType" : "hotel",
+      "bookingDetails" : {
+            "hotelId" : `${details._id}`,
+            "startDate" : `${details.arrDate}`,
+            "endDate" : `${details.depDate}`,
+      }
+    }
+    const encodedHotelBody = encodeURIComponent(JSON.stringify(hotelData));
     dispatch(setAmount(getTotalFare()));
-    navigate("/payment");
+    navigate(`/payment/${encodedHotelBody}`);
     // setBookingFunction({
     //   bookingFunction: bookBus.bind(null, bus_id, depDate, arrDate),
     // });
   }
+
+  useEffect(()=>{
+    if(!isLoggedIn){
+      navigate("/");
+      dispatch(setShowLoginSignupForm(true))
+    }
+  },[isLoggedIn])
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Box

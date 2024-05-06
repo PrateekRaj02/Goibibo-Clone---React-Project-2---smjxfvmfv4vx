@@ -36,9 +36,12 @@ export default function Bus_Card({ busDetails, departureDate }) {
   const depDate = departureDate
     .hour(+departureTime.slice(0, 2))
     .minute(+departureTime.slice(3, 5));
+    
+    
   let arrDate = depDate
     .hour(+arrivalTime.slice(0, 2))
     .minute(+arrivalTime.slice(3, 5));
+    console.log(departureTime+" "+arrivalTime);
   const difference = arrDate.diff(depDate);
   if (difference < 0) {
     arrDate = arrDate.add(24, "hour");
@@ -57,7 +60,7 @@ export default function Bus_Card({ busDetails, departureDate }) {
   }
 
   const handleBook=()=>{
-    const encodedBusDetails = encodeURIComponent(JSON.stringify(busDetails));
+    const encodedBusDetails = encodeURIComponent(JSON.stringify({...busDetails,depDate,arrDate}));
     navigate(`/booking/bus/${encodedBusDetails}`);
   
   }

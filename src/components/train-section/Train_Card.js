@@ -84,7 +84,7 @@ export default function Train_Card({
       departureTime,
       destination,
       arrivalTime,
-      departureDate
+      departureDate,depDate,arrDate,_id
     };
     const encodedTrainDetails = encodeURIComponent(JSON.stringify(data));
     navigate(`/booking/train/${encodedTrainDetails}`);

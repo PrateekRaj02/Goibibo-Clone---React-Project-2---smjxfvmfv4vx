@@ -17,9 +17,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Travellers from "./Travellers";
 import { setAmount } from "../../utils/redux/paymentSlice";
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
+import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
 
 const Bus_Booking_Page = () => {
+  const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
   const { data } = useParams();
   const details = JSON.parse(decodeURIComponent(data));
   const nameRef = useRef();
@@ -35,7 +37,7 @@ const Bus_Booking_Page = () => {
   
   const [anchorEl, setAnchorEl] = useState(null);
   const [errorMesaage, setErrorMessage] = useState("");
-  // console.log(details);
+  console.log(details);
   function handleAddTraveller() {
     if (nameRef.current.value === "") {
       setAnchorEl(nameRef.current);
@@ -112,13 +114,28 @@ const Bus_Booking_Page = () => {
       setErrorMessage("Please Enter Address!");
       return;
     }
-    // setPaymentisPending(true);
+    const busData={
+      "bookingType" : "bus",
+      "bookingDetails" : {
+            "busId" : `${details._id}`,
+            "startDate" : `${details.arrDate}`,
+            "endDate" : `${details.depDate}`,
+      }
+    }
+    const encodedBusBody = encodeURIComponent(JSON.stringify(busData));
     dispatch(setAmount(getTotalFare()));
-    navigate("/payment");
+    navigate(`/payment/${encodedBusBody}`);
     // setBookingFunction({
     //   bookingFunction: bookBus.bind(null, bus_id, depDate, arrDate),
     // });
   }
+
+  useEffect(()=>{
+    if(!isLoggedIn){
+      navigate("/");
+      dispatch(setShowLoginSignupForm(true))
+    }
+  },[isLoggedIn])
   return (
     <Box sx={{ width: "100%", mb: 3 }}>
       <Box

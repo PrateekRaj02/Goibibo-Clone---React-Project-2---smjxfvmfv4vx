@@ -15,6 +15,7 @@ import Bus_Booking_Page from "./checkout/Bus_Booking_Page";
 import Train_Booking_Page from "./checkout/Train_Booking_Page";
 import Flight_Booking_Page from "./checkout/Flight_Booking_Page";
 import Hotel_Booking_Page from "./checkout/Hotel_Booking_Page";
+import My_Trips from "./my-trips/My_Trips";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ export const appRouter = createBrowserRouter([
       {
         path:"/flightsearch",
         element:<Flight_Search_Page/>
+      },
+      {
+        path:"/mytrips",
+        element:<My_Trips/>
       },
       {
         path:"/hotelsearch",
@@ -84,7 +89,7 @@ export const appRouter = createBrowserRouter([
         element:<Hotel_Booking_Page/>
       },
       {
-        path:"/payment",
+        path:"/payment/:body",
         element:<Payment/>
       }
     ]

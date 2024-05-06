@@ -14,7 +14,7 @@ function getRating(rating) {
   if (rating >= 6) return "Good";
   return "Pleasant";
 }
-export default function HotelCard({ hotelData, checkinDate }) {
+export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
   const {
     amenities,
     avgCostPerNight,

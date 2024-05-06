@@ -12,8 +12,10 @@ const Flight_Search_Page = () => {
   const destination = useSelector(
     (store) => store.flight.destinationSelectedAirport
   );
+  const departureDate = useSelector((store) => store.flight.departureDate);
   const day = useSelector((store) => store.flight.day);
   const [flights, setFlights] = useState([]);
+  const [filteredFlights,setFilteredFlights]=useState([]);
   // console.log(source);
   // console.log(destination);
   // console.log(day);
@@ -30,8 +32,14 @@ const Flight_Search_Page = () => {
     });
     const jsonData = await response.json();
     setFlights(jsonData.data.flights);
-    // console.log(jsonData);
+    setFilteredFlights(jsonData.data.flights);
+    console.log(jsonData);
   };
+  const handleStopsChecked=(stops)=>{
+    const temp=flights.filter((flight)=>flight.stops == stops);
+    setFilteredFlights(temp);
+
+  }
   useEffect(() => {
     getAllFlight();
   }, []);
@@ -107,15 +115,15 @@ const Flight_Search_Page = () => {
             <h3 className="font-medium  p-4">Stops</h3>
             <ul className="flex flex-col gap-2 ml-4">
               <li className="flex gap-2">
-                <input type="checkbox" name="" id="direct" />
+                <input type="checkbox" name="" id="direct" onChange={()=>handleStopsChecked(0)} />
                 <label htmlFor="direct">Direct</label>
               </li>
               <li className="flex gap-2">
-                <input type="checkbox" name="" id="1stop" />
+                <input type="checkbox" name="" id="1stop" onChange={()=>handleStopsChecked(1)} />
                 <label htmlFor="1stop">1 stop</label>
               </li>
               <li className="flex gap-2">
-                <input type="checkbox" name="" id="2+stop" />
+                <input type="checkbox" name="" id="2+stop" onChange={()=>handleStopsChecked(2)} />
                 <label htmlFor="2+stop">2+ stops</label>
               </li>
             </ul>
@@ -168,13 +176,14 @@ const Flight_Search_Page = () => {
         </div>
 
         <div className="w-9/12 flex flex-col gap-4">
-          {flights.map((flight) => {
+          {filteredFlights.map((flight) => {
             return (
               <Flight_Card
                 key={flight._id}
                 flight={flight}
                 source={source}
                 destination={destination}
+                departureDate={departureDate}
               />
             );
           })}

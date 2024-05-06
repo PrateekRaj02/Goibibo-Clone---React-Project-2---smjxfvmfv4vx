@@ -26,6 +26,29 @@ export const FACILITIES = [
 	{ type: "Snack Box", svg: IoFastFood },
 ];
 
+export const AVATAR_BACKGROUND_COLORS = [
+	"#800080",
+	"#a52a2a",
+	"#ee82ee",
+	"#008080",
+	"#ff7f50",
+	"#800020",
+	"#b7410e",
+	"#4b0082",
+	"#fa8072",
+	"#00ffff",
+	"#dc143c",
+	"#f4c430",
+	"#43254f",
+	"#ff00ff",
+	"#f28500",
+	"#733635",
+	"#de3163",
+	"#50c878",
+	"#0f52ba",
+	"#65000b",
+];
+
 export const TRAIN_STATIONS = [
 	"Delhi Junction",
 	"Salem Junction",
