@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setSource, setDestination, setDay,setDepartureDate } from "../../utils/redux/busSlice";
+import {useMediaQuery} from '@mui/material';
 
 const Bus_Page = () => {
   const [city, setCity] = useState([]);
@@ -21,6 +22,7 @@ const Bus_Page = () => {
   const dispatch = useDispatch();
   const fromRef = useRef();
   const toRef = useRef();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const handleFromChange = () => {
     const from = fromRef.current.value;
@@ -77,13 +79,13 @@ const Bus_Page = () => {
     getCities();
   }, []);
   return (
-    <div>
-      <div className="absolute h-[900px] w-[1050px] rounded-full bg-blue-500 -top-[70%] -left-[7%] "></div>
+    <div className="">
+      <div className={smallScreen ?"absolute h-[300px] w-full rounded-full bg-blue-500 -top-[3%] ":"absolute h-[900px] w-[1050px] rounded-full bg-blue-500 -top-[70%] -left-[7%]"}></div>
       <div className="w-10/12 m-auto ">
         <h1 className="font-bold text-2xl my-4 relative text-white z-20">
           Bus Ticket Booking
         </h1>
-        <div className="rounded-lg flex flex-col w-1/2 bg-white shadow-md h-80 relative z-20">
+        <div className={`rounded-lg flex flex-col ${smallScreen ? "w-[100%]" :"w-1/2"} bg-white shadow-md h-80 relative z-20`}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <label htmlFor="" className="p-2">
               From
@@ -120,7 +122,7 @@ const Bus_Page = () => {
                 );
               })}
             </select>
-            <div className="mt-2 ml-2">
+            <div className={`${smallScreen?"w-[95%] mt-2 ml-2 mr-2":"mt-2 ml-2"}`}>
               <DatePicker
                 label="Check-In"
                 disablePast
@@ -133,7 +135,7 @@ const Bus_Page = () => {
             </div>
           </LocalizationProvider>
           <button
-            className="text-white rounded-full absolute left-[26%] -bottom-[7%] z-20 bg-orange-600 py-4 px-8 font-bold text-xl"
+            className={`text-white rounded-full absolute ${smallScreen?"left-[21%]":"left-[26%]"} -bottom-[7%] z-20 bg-orange-600 py-4 px-8 font-bold text-xl`}
             onClick={handleSearchClick}
           >
             SEARCH BUS

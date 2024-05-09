@@ -11,6 +11,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { GiRoundStar } from "react-icons/gi";
 import { FACILITIES } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import {useMediaQuery} from '@mui/material';
 
 export default function Bus_Card({ busDetails, departureDate }) {
   const {
@@ -32,6 +33,7 @@ export default function Bus_Card({ busDetails, departureDate }) {
   const [open, setOpen] = useState(false);
   const amenitiesRef = useRef();
   const navigate=useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const depDate = departureDate
     .hour(+departureTime.slice(0, 2))
@@ -74,8 +76,8 @@ export default function Bus_Card({ busDetails, departureDate }) {
         ":hover": { boxShadow: "0 0 10px 0px rgba(0,0,0,0.2)" },
       }}
     >
-      <Stack direction={"row"} alignItems={"center"} gap={2}>
-        <Stack sx={{ width: "30%" }} gap={0.5}>
+
+      {smallScreen && <Stack sx={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"10px" }} direction={"row"} >
           <Typography fontSize={18} fontWeight={600}>
             {name}
           </Typography>
@@ -156,8 +158,94 @@ export default function Bus_Card({ busDetails, departureDate }) {
               </Paper>
             </Popper>
           </Stack>
-        </Stack>
-        <Stack sx={{ width: "120px" }}>
+        </Stack>}
+
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} sx={{display:"flex", justifyContent:"space-between"}} >
+
+        {!smallScreen && <Stack sx={{ width: "30%" }} gap={0.5}>
+          <Typography fontSize={18} fontWeight={600}>
+            {name}
+          </Typography>
+          <Typography fontSize={14} color="#b0b0b0">
+            {type}
+          </Typography>
+          <Stack direction={"row"} gap={2} sx={{ mt: 1 }}>
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              gap={0.5}
+              sx={{
+                py: 0.75,
+                px: 1,
+                bgcolor: `${
+                  rating >= 4 ? "#61b00f" : rating >= 2 ? "#ffa800" : "red"
+                }`,
+                color: "#fff",
+                width: "fit-content",
+                fontSize: 14,
+                borderRadius: "4px",
+              }}
+            >
+              <GiRoundStar size={12} />
+              {rating}
+            </Stack>
+            <Button
+              // variant="contained"
+              sx={{ width: "fit-content", fontSize: 12, p: 0 }}
+              disableRipple
+              ref={amenitiesRef}
+              onClick={toggleButton}
+            >
+              <Typography fontSize={12}>Amenities</Typography>{" "}
+              <IoIosArrowDown
+                size={16}
+                style={{
+                  marginLeft: "5px",
+                  transform: `rotate(${open ? "180deg" : "0deg"})`,
+                  transition: "transform 150ms",
+                }}
+              />
+            </Button>
+            <Popper
+              placement="bottom-start"
+              open={open}
+              anchorEl={amenitiesRef.current}
+            >
+              <Paper
+                sx={{
+                  m: 0,
+                  p: 0,
+                  boxShadow: "0 0 10px 1px rgba(0,0,0,0.2)",
+                }}
+              >
+                <ClickAwayListener onClickAway={handleClose}>
+                  <Stack direction={"row"} gap={2} sx={{ px: 2, py: 0.5 }}>
+                    {amenities.map((cur) => {
+                      const Icon =
+                        FACILITIES[
+                          FACILITIES.findIndex((item) => item.type == cur)
+                        ].svg;
+                      return (
+                        <Stack
+                          key={cur}
+                          direction={"row"}
+                          gap={0.75}
+                          alignItems={"center"}
+                          sx={{ fontSize: 12 }}
+                        >
+                          <Icon color="#ec5b24" />
+                          <Typography>{cur}</Typography>
+                        </Stack>
+                      );
+                    })}
+                  </Stack>
+                </ClickAwayListener>
+              </Paper>
+            </Popper>
+          </Stack>
+        </Stack>}
+
+        <Stack sx={{ width: `${smallScreen ? "":"120px"}` }}>
           <Typography fontSize={14} color="#868686">
             {depDate.format("DD MMM")}
           </Typography>
@@ -168,10 +256,12 @@ export default function Bus_Card({ busDetails, departureDate }) {
             {from}
           </Typography>
         </Stack>
+
         <Divider
           orientation="horizontal"
           sx={{
-            width: 150,
+            width: `${smallScreen ? "30%":"200px"}`,
+            marginLeft:`${smallScreen && "10px"}`,
             "::before": {
               borderTopStyle: "dashed",
               borderTopWidth: "2px",
@@ -198,7 +288,8 @@ export default function Bus_Card({ busDetails, departureDate }) {
             {durationString}
           </Typography>
         </Divider>
-        <Stack textAlign={"right"} sx={{ width: "120px" }}>
+
+        <Stack textAlign={"right"} sx={{ width: `${smallScreen ? "":"120px"}` }}>
           <Typography fontSize={14} color="#868686">
             {arrDate.format("DD MMM")}
           </Typography>
@@ -209,7 +300,8 @@ export default function Bus_Card({ busDetails, departureDate }) {
             {to}
           </Typography>
         </Stack>
-        <Stack alignItems={"flex-end"} gap={0.5}>
+
+        <Stack  gap={0.5} sx={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Typography fontSize={20} fontWeight={600} color="#212121">
             ₹{fare}
           </Typography>
@@ -229,6 +321,7 @@ export default function Bus_Card({ busDetails, departureDate }) {
             {seats} seats Available
           </Typography>
         </Stack>
+
       </Stack>
     </Stack>
   );

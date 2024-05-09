@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Divider, Stack, Typography } from "@mui/material";
+import {useMediaQuery} from '@mui/material';
 
 const Flight_Detail = ({
   airlineImg,
@@ -15,8 +16,9 @@ const Flight_Detail = ({
   const destinationAirport = useSelector(
     (store) => store.flight.destinationAirport
   );
+  const smallScreen=useMediaQuery('(max-width:650px)');
   return (
-    <div className="border rounded-lg flex p-2 justify-between w-full">
+    <div className={`border rounded-lg flex p-2 justify-between w-full ${smallScreen ?"gap-6":""}`}>
       <div className="flex flex-col ">
         <img src={airlineImg} className="h-5" />
         <p className="text-sm">{airlineName}</p>

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { baseUrl, projectId } from "../../utils/constant";
 import Hotel_Card from "./Hotel_Card";
+import {useMediaQuery} from '@mui/material';
 
 const Hotel_Search_Page = () => {
   const selectedCity = useSelector((store) => store.hotel.selectedCity);
   const checkinDate=useSelector((store)=>store.hotel.checkinDate);
   const checkoutDate=useSelector((store)=>store.hotel.checkoutDate);
   const [hotelData, setHotelData] = useState([]);
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const getHotelsData = async () => {
     const apiUrl = baseUrl + `hotel?search={"location":"${selectedCity}"}`;
@@ -32,8 +34,8 @@ const Hotel_Search_Page = () => {
   return (
     <div>
       <div></div>
-      <div className="w-10/12 mx-auto flex gap-4 my-4">
-        <div className="w-3/12 h-fit rounded-lg shadow-xl bg-white">
+      <div className={`${smallScreen?"100%":"w-10/12"} mx-auto flex gap-4 my-4`}>
+        {!smallScreen && <div className="w-3/12 h-fit rounded-lg shadow-xl bg-white">
           <div className="flex justify-between">
             <h3 className="font-bold text-lg p-4">Filters</h3>
             <button className="mr-2 text-gray-400">Clear</button>
@@ -100,7 +102,7 @@ const Hotel_Search_Page = () => {
               Apply Filter
             </button>
           </div>
-        </div>
+        </div>}
 
         <div>
           <h2 className="text-2xl font-medium mb-2">

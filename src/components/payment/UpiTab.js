@@ -17,6 +17,8 @@ import bhimImg from "../../assets/payment/jp_bhim.png";
 import qr from "../../assets/payment/qr.gif";
 import barcode from "../../assets/payment/barcode.jpeg";
 import { IoIosArrowBack } from "react-icons/io";
+import {useMediaQuery} from '@mui/material';
+
 export default function UpiTab({
   tabIndex,
   qrCodeGenerated,
@@ -32,6 +34,7 @@ export default function UpiTab({
   setGeneratingQR,
 }) {
   const [upiID, setUPIID] = useState("");
+  const smallScreen=useMediaQuery('(max-width:650px)');
   function handleGoBack() {
     setShowModal(true);
   }
@@ -131,7 +134,7 @@ export default function UpiTab({
                   }}
                   helperText="A collect request will be sent to this UPI ID"
                   placeholder="Username@bankname"
-                  sx={{ width: 400 }}
+                  sx={{ width: `${smallScreen?"100%":"400"}` }}
                   FormHelperTextProps={{
                     sx: { fontSize: "16px" },
                   }}

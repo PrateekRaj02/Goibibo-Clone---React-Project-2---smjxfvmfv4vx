@@ -5,11 +5,13 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import paymentImage from "../../assets/payment.png";
 import download from "../../assets/download.png";
+import {useMediaQuery} from '@mui/material';
 
 const Bus_Footer = () => {
+  const smallScreen=useMediaQuery('(max-width:650px)');
   return (
     <div className='bg-white'>
-        <div className='grid grid-cols-6 gap-16 justify-center p-10'>
+        <div className={`grid ${smallScreen?"grid-cols-2":"grid-cols-6"} gap-16 justify-center p-10`}>
             <div className='flex flex-col gap-2'>
                 <h3 className='font-bold'>Popular Bus Routes</h3>
                 <p className='text-sm'>Delhi to Manali Bus</p>
@@ -100,19 +102,19 @@ const Bus_Footer = () => {
           <span className="flex flex-col">
             <header className="font-bold ">Follow Us</header>
             <div className="flex gap-2 text-gray-400">
-              <FacebookIcon sx={{ fontSize: "35px" }} />
-              <TwitterIcon sx={{ fontSize: "35px" }} />
-              <YouTubeIcon sx={{ fontSize: "35px" }} />
+              <FacebookIcon sx={{ fontSize: `${smallScreen?"25px":"35px"}` }} />
+              <TwitterIcon sx={{ fontSize: `${smallScreen?"25px":"35px"}` }} />
+              <YouTubeIcon sx={{ fontSize: `${smallScreen?"25px":"35px"}` }} />
             </div>
           </span>
           <span className="flex flex-col items-center">
-            <header className="font-bold ">
-              Book Tickets fatser.Download Our Mobile App
+            <header className={`${smallScreen?"font-bold text-sm":"font-bold"}`}>
+              {!smallScreen && "Book Tickets fatser."}Download Our Mobile App
             </header>
-            <img src={download} alt="" className="w-6/12" />
+            <img src={download} alt="" className={`${smallScreen?"":"w-6/12"}`} />
           </span>
           <span>
-            <img src={paymentImage} alt="payment-logo"/>
+            <img src={paymentImage} alt="payment-logo" />
           </span>
         </div>
         <Divider sx={{ marginY: "8px" }} />

@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import {useNavigate} from "react-router-dom";
+import {useMediaQuery} from '@mui/material';
 
 function getDateString(dateObj) {
   return `${dateObj.format("ddd")}, ${dateObj.format("D")} ${dateObj.format(
@@ -46,6 +47,8 @@ export default function Train_Card({
   const durationMin = +travelDuration.split(" ")[1].slice(0, -1);
   const depDate = new dayjs(departureDate).hour(depHour).minute(depMin);
   const arrDate = depDate.add(durationHours, "hour").add(durationMin, "minute");
+  const smallScreen=useMediaQuery('(max-width:650px)');
+
   function handleShowAvailability(id) {
     if (id === availablityBoxId) setAvailablityBoxId(0);
     else setAvailablityBoxId(id);
@@ -96,7 +99,7 @@ export default function Train_Card({
       sx={{
         my: 2,
         mx: "auto",
-        width: 1140,
+        width: `${smallScreen ?"100%":"90%"}`,
         boxShadow: "0 0 10px rgba(0,0,0,.3)",
         bgcolor: "#fff",
       }}
@@ -146,7 +149,8 @@ export default function Train_Card({
             <Typography>{trainType}</Typography>
           </Stack>
         </Box>
-        <Stack direction={"row"} sx={{ p: 2 }} gap={3} alignItems={"center"}>
+
+        {!smallScreen && <Stack direction={"row"} sx={{ p: 2 }} gap={3} alignItems={"center"}>
           <Stack>
             <Typography
               sx={{
@@ -237,6 +241,7 @@ export default function Train_Card({
               {getDateString(arrDate)}
             </Typography>
           </Stack>
+
           <Button
             variant="contained"
             disableRipple
@@ -266,9 +271,134 @@ export default function Train_Card({
               />
             </>
           </Button>
-        </Stack>
+        </Stack>}
+        
       </Stack>
-      <Stack direction={"row"} gap={2} sx={{ m: 2 }}>
+
+      {smallScreen && <Stack direction={"row"} sx={{ p: 2 }} gap={3} alignItems={"center"}>
+          <Stack>
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                fontSize: "14px",
+                color: "#ec5b24",
+              }}
+            >
+              {source}
+            </Typography>
+            <Typography
+              sx={{
+                color: " rgba(0,0,0,.87)",
+                fontWeight: 600,
+                fontSize: "20px",
+              }}
+            >
+              {departureTime}
+            </Typography>
+            <Typography
+              sx={{
+                color: "rgba(0,0,0,.54)",
+                fontWeight: 400,
+                fontSize: "12px",
+              }}
+            >
+              {getDateString(depDate)}
+            </Typography>
+          </Stack>
+          <Stack sx={{ width: "130px" }} alignItems={"center"}>
+            <Typography>{travelDuration}</Typography>
+            <Stack
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              direction={"row"}
+              sx={{
+                height: "2px",
+                bgcolor: "rgb(187, 187, 187) ",
+                width: "100%",
+              }}
+            >
+              <div
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "6px",
+                  backgroundColor: "rgb(117, 117, 117)",
+                  mt: "-2px",
+                }}
+              ></div>
+              <div
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "6px",
+                  backgroundColor: "rgb(117, 117, 117)",
+                  mt: "-2px",
+                }}
+              ></div>
+            </Stack>
+          </Stack>
+          <Stack>
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                fontSize: "14px",
+                color: "#ec5b24",
+              }}
+            >
+              {destination}
+            </Typography>
+            <Typography
+              sx={{
+                color: " rgba(0,0,0,.87)",
+                fontWeight: 600,
+                fontSize: "20px",
+              }}
+            >
+              {arrivalTime}
+            </Typography>
+            <Typography
+              sx={{
+                color: "rgba(0,0,0,.54)",
+                fontWeight: 400,
+                fontSize: "12px",
+              }}
+            >
+              {getDateString(arrDate)}
+            </Typography>
+          </Stack>
+
+          <Button
+            variant="contained"
+            disableRipple
+            sx={{
+              py: 1,
+              px: 2,
+              fontWeight: 600,
+              fontSize: "12px",
+              borderRadius: 0,
+            }}
+            onClick={() => handleShowAvailability(_id)}
+          >
+            <>
+              {availablityBoxId == _id
+                ? "Hide Availability"
+                : "Show Availability"}
+              <IoIosArrowDown
+                size={"20px"}
+                fontWeight={"600"}
+                style={{
+                  marginLeft: "6px",
+                  transform: `rotate(${
+                    availablityBoxId == _id ? "180deg" : "0deg"
+                  })`,
+                  transition: "transform 200ms",
+                }}
+              />
+            </>
+          </Button>
+        </Stack>}
+
+      {!smallScreen && <Stack direction={"row"} gap={2} sx={{ m: 2 }}>
         {coaches.map(({ coachType, numberOfSeats }, index) => {
           return (
             <Stack key={index} alignItems={"center"} gap={1}>
@@ -323,7 +453,8 @@ export default function Train_Card({
             </Stack>
           );
         })}
-      </Stack>
+      </Stack>}
+
       {availablityBoxId == _id && (
         <DropDownCard
           coaches={coaches}
@@ -335,15 +466,20 @@ export default function Train_Card({
     </Stack>
   );
 }
+
+
 function DropDownCard({ date, coaches, id, handleBook }) {
+  const smallScreen=useMediaQuery('(max-width:650px)');
   return (
     <Stack
       sx={{
         p: 2,
         background: "#FCF5F2",
         boxShadow: "inset 0 2px 20px rgba(0,0,0,.1)",
-        flexDirection: "row",
-        gap: 2,
+        flexDirection: `${!smallScreen && "row"}`,
+        display:`${smallScreen ?"grid":"flex"}`,
+        gridTemplateColumns:`${smallScreen && "repeat(3, 1fr)"}`,
+        gap: `${smallScreen?"4px":"8px"}`,
       }}
     >
       {coaches.map(({ coachType, numberOfSeats }) => (

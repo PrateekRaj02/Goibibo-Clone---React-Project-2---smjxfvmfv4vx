@@ -6,6 +6,8 @@ import spicejetlogo from "../../assets/spicejetlogo.png";
 import { useSelector } from "react-redux";
 import { baseUrl, projectId } from "../../utils/constant";
 import Flight_Card from "./Flight_Card";
+import {useMediaQuery} from '@mui/material';
+import GlobalLoader from "../loder/GlobalLoader";
 
 const Flight_Search_Page = () => {
   const source = useSelector((store) => store.flight.sourceSelectedAirport);
@@ -16,6 +18,8 @@ const Flight_Search_Page = () => {
   const day = useSelector((store) => store.flight.day);
   const [flights, setFlights] = useState([]);
   const [filteredFlights,setFilteredFlights]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const smallScreen=useMediaQuery('(max-width:650px)');
   // console.log(source);
   // console.log(destination);
   // console.log(day);
@@ -31,9 +35,12 @@ const Flight_Search_Page = () => {
       },
     });
     const jsonData = await response.json();
-    setFlights(jsonData.data.flights);
-    setFilteredFlights(jsonData.data.flights);
-    console.log(jsonData);
+    if(response.ok){
+      setFlights(jsonData.data.flights);
+      setFilteredFlights(jsonData.data.flights);
+      setLoading(false);
+    }
+    // console.log(jsonData);
   };
   const handleStopsChecked=(stops)=>{
     const temp=flights.filter((flight)=>flight.stops == stops);
@@ -43,11 +50,11 @@ const Flight_Search_Page = () => {
   useEffect(() => {
     getAllFlight();
   }, []);
-  return (
+  return loading ? <GlobalLoader/> : (
     <div>
       <div className="bg-blue-700">
         <div className="w-10/12 mx-auto">
-          <div className="p-2 flex gap-2 font-medium text-white ">
+          <div className="py-2 flex gap-2 font-medium text-white ">
             <div className="flex gap-2 p-2">
               <input type="radio" name="radio" id="one" checked />
               <label htmlFor="one">One way</label>
@@ -80,8 +87,8 @@ const Flight_Search_Page = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto flex gap-4  my-4">
-        <div className="w-3/12 h-fit rounded-lg shadow-xl bg-white">
+      <div className={`${smallScreen?"":"w-10/12"} mx-auto flex gap-4  my-4`}>
+        {!smallScreen && <div className="w-3/12 h-fit rounded-lg shadow-xl bg-white">
           <div className="flex justify-between">
           <h3 className="font-bold text-lg p-4">Filters</h3>
           <button className="mr-2 text-gray-400">Clear</button>
@@ -173,9 +180,9 @@ const Flight_Search_Page = () => {
           <div className="flex justify-center my-4">
             <button className="rounded-xl p-4 bg-amber-400">Apply Filter</button>
           </div>
-        </div>
+        </div>}
 
-        <div className="w-9/12 flex flex-col gap-4">
+        <div className={`${smallScreen? "w-screen":"w-9/12"} flex flex-col gap-4`}>
           {filteredFlights.map((flight) => {
             return (
               <Flight_Card

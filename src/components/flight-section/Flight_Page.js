@@ -30,6 +30,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Stack from "@mui/material/Stack";
 import dayjs from "dayjs";
+import {useMediaQuery} from '@mui/material';
 
 const Flight_Page = () => {
   // const [fromOpen, setFromOpen] = useState(false);
@@ -49,7 +50,7 @@ const Flight_Page = () => {
   const sourceRef = useRef();
   const destinationRef = useRef();
   const navigate = useNavigate();
-
+  const smallScreen=useMediaQuery('(max-width:650px)');
   // console.log(day);
 
   const getAllAirports = async () => {
@@ -62,7 +63,7 @@ const Flight_Page = () => {
     });
     const jsonData = await response.json();
     setAirports(jsonData.data.airports);
-    console.log(jsonData.data.airports);
+    // console.log(jsonData.data.airports);
   };
 
   const handleDateChange = (date) => {
@@ -150,7 +151,7 @@ const Flight_Page = () => {
         <h1 className="font-bold text-2xl text-center my-4 relative text-white z-20">
           Domestic and International Flights
         </h1>
-        <div className="rounded-lg flex flex-col  bg-white shadow-md h-52 relative z-20">
+        <div className={`rounded-lg flex flex-col  bg-white shadow-md ${smallScreen?"":"h-52"} relative z-20`}>
           <div className="p-2 flex gap-2 font-medium text-gray-600">
             <div className="flex gap-1 bg-blue-100 rounded-2xl p-2">
               <input type="radio" name="radio" id="one" checked />
@@ -164,7 +165,7 @@ const Flight_Page = () => {
                 disabled
                 className="cursor-not-allowed"
               />
-              <label htmlFor="round" className="cursor-not-allowed">
+              <label htmlFor="round" className={`${smallScreen?"text-sm":""} cursor-not-allowed`}>
                 Round Trip
               </label>
             </div>
@@ -176,16 +177,16 @@ const Flight_Page = () => {
                 disabled
                 className="cursor-not-allowed"
               />
-              <label htmlFor="multi" className="cursor-not-allowed">
+              <label htmlFor="multi" className={`${smallScreen?"text-sm":""} cursor-not-allowed`}>
                 Multi City
               </label>
             </div>
           </div>
-          <div className="flex gap-4 p-2">
+          <div className={`${smallScreen?"flex flex-col gap-4":"flex gap-4 p-2"}`}>
             <select
               name=""
               id=""
-              className="w-[40%] border p-2 rounded-lg"
+              className={`${smallScreen?"w-[95%] p-4 rounded-lg mx-auto":"w-[40%] border p-2 rounded-lg"}`}
               onChange={handleFromClick}
               ref={sourceRef}
             >
@@ -210,7 +211,7 @@ const Flight_Page = () => {
             <select
               name=""
               id=""
-              className="w-[40%] border rounded-lg p-2"
+              className={`${smallScreen?"w-[95%] p-4 rounded-lg mx-auto":"w-[40%] border p-2 rounded-lg"}`}
               onChange={handleToClick}
               ref={destinationRef}
             >
@@ -221,6 +222,7 @@ const Flight_Page = () => {
               ))}
             </select>
 
+              <div className={`${smallScreen && "mb-10 w-[95%] mx-auto"}`}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Choose Date"
@@ -232,6 +234,7 @@ const Flight_Page = () => {
                 onChange={(date) => handleDateChange(date)}
               />
             </LocalizationProvider>
+            </div>
             {/* <LocalizationProvider dateAdapter={DateAdapter}>
             <DatePicker label="Choose Date" 
             sx={{ width: 200 }}
@@ -263,7 +266,7 @@ const Flight_Page = () => {
             </div>
           </div> */}
           <button
-            className="text-white rounded-full absolute left-[40%] -bottom-8 bg-orange-600 py-4 px-8 font-bold text-xl"
+            className={`text-white rounded-full absolute ${smallScreen?"-bottom-8 left-[20%]":"left-[40%] -bottom-8"} bg-orange-600 py-4 px-8 font-bold text-xl`}
             onClick={handleSearchClick}
           >
             SEARCH FLIGHTS

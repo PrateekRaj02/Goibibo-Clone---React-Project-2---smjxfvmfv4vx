@@ -20,6 +20,7 @@ import {
   setToStation,
   setDepartureDate
 } from "../../utils/redux/trainSlice";
+import {useMediaQuery} from '@mui/material';
 
 const Train_Page = () => {
   const from = useSelector((store) => store.train.from);
@@ -30,16 +31,17 @@ const Train_Page = () => {
   const dispatch = useDispatch();
   const fromRef = useRef();
   const toRef = useRef();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const handleFromStation = () => {
     let fromStation = fromRef.current.value;
-    console.log(fromStation);
+    // console.log(fromStation);
     dispatch(setFromStation(fromStation));
   };
 
   const handleToStation = () => {
     let toStation = toRef.current.value;
-    console.log(toStation);
+    // console.log(toStation);
     dispatch(setToStation(toStation));
   };
 
@@ -49,7 +51,7 @@ const Train_Page = () => {
 
     const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const dayOfWeek = weekDays[new dayjs(depDate).day()];
-    console.log(dayOfWeek);
+    // console.log(dayOfWeek);
     dispatch(setDay(dayOfWeek));
   };
 
@@ -65,13 +67,12 @@ const Train_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       navigate("/trainsearch");
     }
   };
 
-  useEffect(() => {}, []);
   return (
     <div>
       <div className="absolute h-3/4 w-full rounded-full bg-orange-500 -top-1/4"></div>
@@ -92,13 +93,13 @@ const Train_Page = () => {
           </div>
         </div>
         <div className="rounded-lg flex flex-col  bg-white shadow-md py-10 relative z-20">
-          <div className="flex justify-around p-4">
-            <div>
+          <div className={`${smallScreen?"flex flex-col gap-2":"flex justify-around p-4"}`}>
+            <div className={`${smallScreen?"w-full p-2":""}`}>
               <p>From</p>
               <select
                 name=""
                 id=""
-                className="border p-2 rounded-lg"
+                className={`${smallScreen?"w-full":""} border p-2 rounded-lg`}
                 ref={fromRef}
                 onChange={handleFromStation}
               >
@@ -109,12 +110,12 @@ const Train_Page = () => {
                 ))}
               </select>
             </div>
-            <div>
+            <div className={`${smallScreen?"w-full p-2":""}`}>
               <p>To</p>
               <select
                 name=""
                 id=""
-                className="border p-2 rounded-lg"
+                className={`${smallScreen?"w-full":""} border p-2 rounded-lg`}
                 ref={toRef}
                 onChange={handleToStation}
               >
@@ -125,6 +126,7 @@ const Train_Page = () => {
                 ))}
               </select>
             </div>
+            <div className={`${smallScreen?"w-[95%] mx-auto mb-4":""}`}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Choose Date"
@@ -136,9 +138,10 @@ const Train_Page = () => {
                 onChange={(date) => handleDateChange(date)}
               />
             </LocalizationProvider>
+            </div>
           </div>
           <button
-            className="text-white rounded-full absolute left-[40%] -bottom-8 bg-orange-600 py-4 px-8 font-bold text-xl md:max-w-3xl:left-[20%] "
+            className={`text-white rounded-full absolute ${smallScreen?"left-[20%] -bottom-[8%]":"left-[40%] -bottom-8"} bg-orange-600 py-4 px-8 font-bold text-xl md:max-w-3xl:left-[20%] `}
             onClick={handleSearchClick}
           >
             SEARCH TRAINS
@@ -149,7 +152,7 @@ const Train_Page = () => {
             <h1 className="text-4xl font-bold">1 million+ customers</h1>
             <p className="text-lg">book train tickets with us because</p>
           </div>
-          <div className="flex justify-between mt-5">
+          {!smallScreen && <div className="flex justify-between mt-5">
             <div className="flex gap-2 w-[30%]">
               <img src={no_can_fee} alt="" />
               <div className="flex flex-col">
@@ -181,7 +184,7 @@ const Train_Page = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div>}
         </div>
         <OfferForYou />
         <div className="w-full rounded-lg m-auto mt-4 bg-white p-8">

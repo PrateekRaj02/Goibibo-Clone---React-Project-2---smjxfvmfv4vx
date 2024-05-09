@@ -11,7 +11,8 @@ import { FaPlug } from "react-icons/fa";
 import { IoMdRestaurant } from "react-icons/io";
 import { FaYoutube } from "react-icons/fa";
 import { Divider, Stack, Typography } from "@mui/material";
-// import { AIRPORTS } from "../../../../constants";
+import {useMediaQuery} from '@mui/material';
+
 export default function FlightDetailsTab({
 	flightID,
 	source,
@@ -27,6 +28,7 @@ export default function FlightDetailsTab({
   const destinationAirport = useSelector(
     (store) => store.flight.destinationAirport
   );
+  const smallScreen=useMediaQuery('(max-width:650px)');
   const sourceCity = useSelector((store) => store.flight.sourceCity);
   const destinationCity = useSelector(
     (store) => store.flight.destinationCity
@@ -99,8 +101,9 @@ export default function FlightDetailsTab({
 				</Typography>
 				<Typography fontSize={"14px"}>Economy</Typography>
 			</Stack>
-			<Stack direction={"row"} sx={{ p: 2 }} gap={3}>
-				<Stack>
+			<Stack direction={`${smallScreen?"column":"row"}`} sx={{ p: 2 }} gap={3}>
+				<Stack direction={`${smallScreen && "row"}`} sx={{ p: 2 }} gap={3}>
+					<Stack>
 					<Typography fontSize={"26px"}>
 						{source}{" "}
 						<span
@@ -111,24 +114,27 @@ export default function FlightDetailsTab({
 							{departureTime}
 						</span>
 					</Typography>
-					<Typography color="rgba(0,0,0,0.38)" fontSize={"14px"}>
-						{/* {depDate.toUTCString().slice(0, 11)} */}
-					</Typography>
+					
 					<Typography fontSize={"12px"} color="rgba(0,0,0,.38)">
                     {sourceAirport}
 					</Typography>
 					<Typography fontSize={"12px"} color="rgba(0,0,0,.38)">
 						{sourceCity}
 					</Typography>
-				</Stack>
-				<Stack alignItems={"center"} justifyContent={"center"}>
+				    </Stack>
+
+					<Stack alignItems={"center"} justifyContent={"center"}>
 					<SlClock size={"24px"} color="rgba(0,0,0,0.3)" />
 					<Typography fontSize="14px" color="rgba(0,0,0,.38)">
 						{duration}:00 hrs
 					</Typography>
-				</Stack>
-				<Stack>
-					<Typography fontSize={"26px"}>
+					</Stack>
+					
+					<div className={`${smallScreen ? "flex flex-col" :""}`}>
+					
+					<Typography fontSize={"26px"} sx={{
+  ...(smallScreen ? {display: "flex", flexDirection: "column"} : {})
+}}>
 						{destination}{" "}
 						<span
 							style={{
@@ -138,17 +144,20 @@ export default function FlightDetailsTab({
 							{arrivalTime}
 						</span>
 					</Typography>
-					<Typography color="rgba(0,0,0,0.38)" fontSize={"14px"}>
-						{/* {arrDate.toUTCString().slice(0, 11)} */}
-					</Typography>
+					
 					<Typography fontSize={"12px"} color="rgba(0,0,0,.38)">
                     {destinationAirport}
 					</Typography>
+
 					<Typography fontSize={"12px"} color="rgba(0,0,0,.38)">
 						{destinationCity}
 					</Typography>
+
+					</div>
 				</Stack>
-				<Divider orientation="vertical" flexItem />
+
+				<Divider orientation={`${smallScreen?"horizontal":"vertical" }`} flexItem />
+
 				<Stack>
 					<Stack direction={"row"}>
 						<Stack

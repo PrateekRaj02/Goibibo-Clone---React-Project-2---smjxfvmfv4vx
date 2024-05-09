@@ -71,11 +71,12 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import loginSignupImg from "../../assets/login-signup-banner.png";
+// import loginSignupImg from "../../assets/login-signup-banner.png";
 import { BiSolidError } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsLoggedIn, setShowLoginSignupForm, setToken, setUserDetails } from "../../utils/redux/authSlice";
 import { baseUrl, projectId } from "../../utils/constant";
+// import {useMediaQuery} from '@mui/material';
 
 
 const style = {
@@ -167,7 +168,7 @@ function LogInTab() {
       body: JSON.stringify(body),
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       dispatch(setUserDetails(JSON.stringify({ name: jsonData.data.user.name, email: jsonData.data.user.email })))
       // setUser({ name: jsonData.data.user.name, email: jsonData.data.user.email });
@@ -335,7 +336,7 @@ function SignUpTab() {
       body: JSON.stringify(body),
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       dispatch(setUserDetails(JSON.stringify({ name: jsonData.data.user.name, email: jsonData.data.user.email })))
       dispatch(setShowLoginSignupForm(false));
@@ -453,8 +454,10 @@ export default function LoginSignupForm() {
   const showLoginSignupForm = useSelector(
     (store) => store.auth.showLoginSignupForm
   );
+  // const smallScreen=useMediaQuery('(max-width:650px)');
   const handleOpen = () => dispatch(setShowLoginSignupForm(true));
   const handleClose = () => dispatch(setShowLoginSignupForm(false));
+
   return (
     <Modal
       open={showLoginSignupForm}
@@ -463,7 +466,7 @@ export default function LoginSignupForm() {
       keepMounted
     >
       <Stack sx={style} direction={"row"}>
-        <img src={loginSignupImg} style={{ width: "300px" }} />
+        {/* {!smallScreen && <img src={loginSignupImg} style={{ width: "300px" }} />} */}
         <Stack
           className="signup-login-form"
           direction={"column"}

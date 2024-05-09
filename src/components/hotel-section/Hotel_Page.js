@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import {useSelector,useDispatch} from "react-redux"
 import { setCheckInDate, setCheckOutDate, setSelectedCity } from "../../utils/redux/hotelSlice";
 import {useNavigate} from "react-router-dom";
+import {useMediaQuery} from '@mui/material';
 
 const Hotel_Page = () => {
   const [city, setCity] = useState([]);
@@ -17,6 +18,7 @@ const Hotel_Page = () => {
   const selectedCity=useSelector((store)=>store.hotel.selectedCity);
   const dispatch=useDispatch();
   const navigate=useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const getCities = async () => {
     const apiUrl = baseUrl + `city`;
@@ -27,13 +29,13 @@ const Hotel_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData.data.cities);
+    // console.log(jsonData.data.cities);
     setCity(jsonData.data.cities);
   };
 
   const handleChange=()=>{
     let ci=cityRef.current.value.split(",")[0];
-    console.log(ci);
+    // console.log(ci);
     dispatch(setSelectedCity(ci));
   }
 
@@ -68,12 +70,12 @@ const Hotel_Page = () => {
 
   return (
     <div className="">
-      <div className="absolute h-[900px] w-[1050px] rounded-full bg-orange-500 -top-[70%] -left-[7%] "></div>
+      <div className={`absolute ${smallScreen?"h-3/4 w-full -top-[15%]":"h-[900px] w-[1050px]"} rounded-full bg-orange-500 -top-[70%] -left-[7%]`}></div>
       <div className="w-10/12 m-auto pb-5">
         <h1 className="font-bold text-2xl my-4 relative text-white z-20">
           Book Hotels & Homestays
         </h1>
-        <div className="rounded-lg flex flex-col w-1/2 bg-white shadow-md h-80 relative z-20">
+        <div className={`rounded-lg flex flex-col ${smallScreen?"w-full":"w-1/2"} bg-white shadow-md h-80 relative z-20`}>
           <div>
             <ul className="p-4 flex gap-2">
               <li className="flex gap-2">
@@ -96,7 +98,7 @@ const Hotel_Page = () => {
               );
             })}
           </select>
-          <div className="flex justify-between p-1">
+          <div className={`${smallScreen?"flex flex-col gap-4 w-[95%] mx-auto mt-2":"flex justify-between p-1"}`}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Check-In"
@@ -125,7 +127,7 @@ const Hotel_Page = () => {
           </div>
           
 
-          <button className="text-white rounded-full absolute left-[25%] -bottom-[7%] z-20 bg-orange-600 py-4 px-8 font-bold text-xl" onClick={handleClick}>
+          <button className={`text-white rounded-full absolute ${smallScreen?"left-[20%] -bottom-[7%]": "left-[25%] -bottom-[7%]"} z-20 bg-orange-600 py-4 px-8 font-bold text-xl`} onClick={handleClick}>
             SEARCH HOTELS
           </button>
         </div>

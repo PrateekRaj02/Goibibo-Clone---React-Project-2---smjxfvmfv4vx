@@ -5,16 +5,16 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./OfferForYou.css";
-
-
+import {useMediaQuery} from '@mui/material';
 
 const OfferForYou = () => {
   const [offer, setOffer] = useState([]);
+  const smallScreen=useMediaQuery('(max-width:650px)');
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 2.5,
+    slidesToShow: `${smallScreen?1:2}`,
     slidesToScroll: 1,
   };
   

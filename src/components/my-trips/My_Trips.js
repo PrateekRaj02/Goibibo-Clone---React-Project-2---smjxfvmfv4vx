@@ -23,7 +23,7 @@ const My_Trips = () => {
             }
         })
         const jsonData=await response.json();
-        console.log(jsonData);
+        // console.log(jsonData);
         if(response.ok){
           setBookings(jsonData.data);
         }
@@ -41,17 +41,17 @@ const My_Trips = () => {
         }
       },[isLoggedIn])
   return (
-    <div className='h-screen'>
+    <div className='pb-4'>
       {bookings.length == 0 && (
         <>
-      <div className='text-2xl bg-blue-300 mt-10 text-center w-11/12 mx-auto rounded-lg p-4'>No Trips for Now Book a Trip</div>
+      <div className='text-2xl bg-blue-300 mt-10 text-center h-screen w-11/12 mx-auto rounded-lg p-4'>No Trips for Now Book a Trip</div>
       <div className='flex justify-center'>
     <button onClick={handleClick} className='py-4 px-2 bg-orange-500 text-white rounded-lg mt-4'>Go to Home</button>
     </div>
     </>
     )}
     {
-      bookings && (
+      bookings.length > 0 && (
         <div>
     <h2 className="text-2xl my-8 text-center">Booking Details</h2>
     <table className="w-10/12 border-collapse mx-auto border border-solid border-black">

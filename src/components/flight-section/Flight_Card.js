@@ -18,6 +18,7 @@ import TableRow from "@mui/material/TableRow";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
 import Flight_Detail from "./Flight_Detail";
+import {useMediaQuery} from '@mui/material';
 
 const Flight_Card = ({ flight, source, destination,departureDate  }) => {
   const { _id } = flight;
@@ -27,6 +28,8 @@ const Flight_Card = ({ flight, source, destination,departureDate  }) => {
   const [expandDetail, setExpandDetail] = useState(false);
   const navigate=useNavigate();
   const {arrivalTime,departureTime}=flight;
+  const smallScreen=useMediaQuery('(max-width:650px)');
+
   const depDate = departureDate
     .hour(+departureTime.slice(0, 2))
     .minute(+departureTime.slice(3, 5));
@@ -94,38 +97,48 @@ const Flight_Card = ({ flight, source, destination,departureDate  }) => {
   }, []);
 
     return (
-      <div className='w-full rounded-2xl shadow-lg bg-white py-8 px-4'>
+      <div className=' rounded-2xl shadow-lg bg-white py-8 px-4'>
           <div className='flex gap-2 my-2'>
               <img src={airlineImg} className='h-4' />
               <p className='text-sm'>{airlineName}</p>
           </div>
 
-          <div className='flex justify-between'>
-          <div className='flex flex-col gap-1'>
+          {smallScreen && <div className='flex justify-between items-center gap-1 mb-2'>
               <h2 className='font-bold text-lg'>{source} to {destination}</h2>
               <p className="text-xs font-bold">{flight.flightID}</p>
-          </div>
-          <div>
+          </div>}
+
+          <div className='flex justify-between'>
+
+            {!smallScreen && <div className='flex flex-col gap-1'>
+              <h2 className='font-bold text-lg'>{source} to {destination}</h2>
+              <p className="text-xs font-bold">{flight.flightID}</p>
+            </div>}
+            <div>
               <p className='font-bold text-gray-400 text-lg'>Duration</p>
               <p className='font-bold'>{flight.duration} h</p>
-          </div>
-          <div>
+            </div>
+            <div>
               <p className='font-bold text-gray-400 text-lg'>Departure Time</p>
               <p className='font-bold'>{flight.departureTime}</p>
-          </div>
-          <div>
+            </div>
+            <div>
               <p className='font-bold text-gray-400 text-lg'>Stops</p>
               <p className='font-bold'>{flight.stops}</p>
-          </div>
-          <div>
+            </div>
+            <div>
               <p className='font-bold text-gray-400 text-lg'>Ticket Price</p>
               <p className='font-bold'>₹ {flight.ticketPrice}</p>
-          </div>
-          <div className='p-4 bg-orange-500 text-white rounded-lg font-bold'>
+            </div>
+            {!smallScreen && <div className='p-4 bg-orange-500 text-white rounded-lg font-bold'>
               <button onClick={handleBook}>Book Now</button>
-          </div>
+            </div>}
 
           </div>
+
+          {smallScreen && <div className='p-3 my-5 w-[80%] mx-auto bg-orange-400 text-white rounded-lg font-bold flex justify-center'>
+              <button onClick={handleBook}>Book Now</button>
+            </div>}
 
           <div className='flex justify-between mt-2 text-sm '>
               <p className='text-gray-500'>Free Meal</p>
@@ -161,6 +174,7 @@ const Flight_Card = ({ flight, source, destination,departureDate  }) => {
             <Table
               sx={{
                 borderColor: "#ffffff",
+                
               }}
             >
               <TableHead>
@@ -258,7 +272,7 @@ function CustomTabPanel(props) {
 
   return (
     <div role="tabpanel" hidden={value !== index} {...other}>
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
     </div>
   );
 }

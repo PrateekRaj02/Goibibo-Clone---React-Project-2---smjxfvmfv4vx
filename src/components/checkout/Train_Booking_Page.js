@@ -19,6 +19,7 @@ import Travellers from "./Travellers";
 import { setAmount } from "../../utils/redux/paymentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
+import {useMediaQuery} from '@mui/material';
 
 const Train_Booking_Page = () => {
   const isLoggedIn=useSelector((store)=>store.auth.isLoggedIn);
@@ -35,6 +36,7 @@ const Train_Booking_Page = () => {
   const [travellers, setTravellers] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [errorMesaage, setErrorMessage] = useState("");
@@ -140,7 +142,7 @@ const Train_Booking_Page = () => {
   },[isLoggedIn])
   
   return (
-    <Box sx={{ width: "100%", mb: 3 }}>
+    <Box sx={{ width: "100%" }}>
       <Box
         sx={{
           background: "linear-gradient(45deg,#721053,#AD2E41)",
@@ -166,7 +168,7 @@ const Train_Booking_Page = () => {
         </Stack>
       </Box>
       <Stack alignItems={"center"} gap={2}>
-        <Box>
+        <Box sx={{width:`${smallScreen && "100%"}`}}>
           <Typography
             sx={{
               py: 2,
@@ -179,7 +181,7 @@ const Train_Booking_Page = () => {
           >
             BOOKING DETAILS
           </Typography>
-          <Stack sx={{ width: "800px", bgcolor: "#fff" }}>
+          <Stack sx={{ width: `${smallScreen?"100%":"800px"}`, bgcolor: "#fff" }}>
             <Stack
               direction={"row"}
               sx={{ width: "100%", p: 2 }}
@@ -245,7 +247,7 @@ const Train_Booking_Page = () => {
             </Stack>
           </Stack>
         </Box>
-        <Box>
+        <Box sx={{width:`${smallScreen && "100%"}`}}>
           <Typography
             sx={{
               py: 2,
@@ -262,7 +264,7 @@ const Train_Booking_Page = () => {
               passengers (0-4 years), as no booking amount is charged.)
             </span>
           </Typography>
-          <Stack sx={{ width: "800px" }}>
+          <Stack sx={{ width: `${smallScreen?"100%":"800px"}` }}>
             <Stack sx={{ m: 2 }} direction={"row"} flexWrap={"wrap"} gap={3}>
               <TextField
                 variant="standard"
@@ -352,7 +354,7 @@ const Train_Booking_Page = () => {
             <Travellers travellers={travellers} setTravellers={setTravellers} />
           </Stack>
         </Box>
-        <Box>
+        <Box sx={{width:`${smallScreen && "100%"}`}}>
           <Typography
             sx={{
               py: 2,
@@ -365,7 +367,7 @@ const Train_Booking_Page = () => {
           >
             BILLING ADDRESS
           </Typography>
-          <Stack sx={{ width: "800px" }}>
+          <Stack sx={{ width: `${smallScreen?"100%":"800px"}` }}>
             <Stack sx={{ m: 2 }} direction={"row"} flexWrap={"wrap"} gap={3}>
               <TextField
                 label="Pincode"
@@ -412,7 +414,7 @@ const Train_Booking_Page = () => {
             </Stack>
           </Stack>
         </Box>
-        <Box>
+        <Box sx={{width:`${smallScreen && "100%"}`}}>
           <Typography
             sx={{
               py: 2,
@@ -428,7 +430,7 @@ const Train_Booking_Page = () => {
               (We will share the booking details via E-mail. )
             </span>
           </Typography>
-          <Stack sx={{ width: "800px" }}>
+          <Stack sx={{ width: `${smallScreen?"100%":"800px"}` }}>
             <Stack sx={{ m: 2 }} direction={"row"} flexWrap={"wrap"} gap={3}>
               <TextField
                 sx={{
@@ -460,6 +462,7 @@ const Train_Booking_Page = () => {
           variant="contained"
           sx={{
             px: 3,
+            marginBottom:"10px"
           }}
           onClick={handlePay}
         >

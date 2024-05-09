@@ -25,7 +25,7 @@ const Train_Search_Page = () => {
       },
     });
     const jsonData = await response.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     if (response.ok) {
       setTrains(jsonData.data.trains);
     }

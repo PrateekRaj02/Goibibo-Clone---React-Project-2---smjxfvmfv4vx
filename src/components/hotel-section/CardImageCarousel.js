@@ -2,6 +2,8 @@ import { Box, IconButton, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import {useMediaQuery} from '@mui/material';
+
 const iconSX = {
   position: "absolute",
   top: "45%",
@@ -12,8 +14,11 @@ const iconSX = {
   transition: "opacity 180ms",
 };
 const arrowProps = { size: 16, color: "#0770e4" };
+
 export default function CardImageCarousel({ images }) {
   const [index, setIndex] = useState(0);
+  const smallScreen=useMediaQuery('(max-width:650px)');
+
   function handlePrev(e) {
     e.stopPropagation();
     if (index > 0) setIndex(index - 1);
@@ -27,7 +32,7 @@ export default function CardImageCarousel({ images }) {
       position={"relative"}
       sx={{
         overflow: "hidden",
-        width: "300px",
+        width: `${smallScreen?"100%":"300px"}`,
         ":hover .hide": { opacity: 1 },
         borderRadius: "10px",
       }}
@@ -38,12 +43,12 @@ export default function CardImageCarousel({ images }) {
       >
         {images.map((image, index) => {
           return (
-            <Box key={index} sx={{ width: "300px", height: "200px" }}>
+            <Box key={index} sx={{ width: `${smallScreen?"100%":"300px"}`, height: "200px" }}>
               <img
                 loading="lazy"
                 src={image}
                 style={{
-                  width: "300px",
+                  width: `${smallScreen?"100%":"300px"}`,
                   height: "200px",
                   objectFit: "cover",
                 }}

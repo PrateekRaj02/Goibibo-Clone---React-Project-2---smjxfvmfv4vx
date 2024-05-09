@@ -23,6 +23,7 @@ import {
   import UpiTab from "./UpiTab";
 import { setShowLoginSignupForm } from "../../utils/redux/authSlice";
 import { baseUrl, projectId } from "../../utils/constant";
+import {useMediaQuery} from '@mui/material';
   
   export default function Payment() {
     // const { bookingFunction, paymentIsPending, setPaymentisPending, amount } =
@@ -32,9 +33,9 @@ import { baseUrl, projectId } from "../../utils/constant";
     const navigate = useNavigate();
     const { body } = useParams();
     const details = JSON.parse(decodeURIComponent(body));
-    console.log(details);
+    // console.log(details);
     const token=JSON.parse(window.localStorage.getItem("token"))
-    console.log(token);
+    // console.log(token);
     const [time, setTime] = useState(300);
     const [tabIndex, setTabIndex] = useState(0);
     const [bookingWait, setBookingWait] = useState({
@@ -55,6 +56,7 @@ import { baseUrl, projectId } from "../../utils/constant";
     const [cvvHasError, setCvvHasError] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const dispatch=useDispatch();
+    const smallScreen=useMediaQuery('(max-width:650px)');
     if (time === 0) {
       if (!showErrorModal) {
         setShowErrorModal(true);
@@ -82,7 +84,7 @@ import { baseUrl, projectId } from "../../utils/constant";
         body:JSON.stringify(details),
       });
       const jsonData=await response.json();
-      console.log(jsonData);
+      // console.log(jsonData);
     }
     const CURRENCY_FORMATTER = (value) =>
 	new Intl.NumberFormat("en-IN", {
@@ -190,10 +192,10 @@ import { baseUrl, projectId } from "../../utils/constant";
     const mins = ("" + Math.floor(time / 60)).padStart(2, "0");
     const secs = ("" + (time % 60)).padStart(2, "0");
     return (
-      <Container sx={{ mt: 12, mb: 6 }}>
-        <Stack gap={3.5} sx={{ width: "100%" }}>
+      <Container sx={{ mt: 4, pb: 6 }}>
+        <Stack gap={3.5}  sx={{ width: "100%" }}>
           <Stack
-            direction={"row"}
+            direction={`${smallScreen && "column"}`}
             justifyContent={"space-between"}
             alignItems={"center"}
             sx={{
@@ -221,11 +223,12 @@ import { baseUrl, projectId } from "../../utils/constant";
               </Typography>
               <Typography fontSize={12}>left to complete the booking</Typography>
             </Stack>
+
             <Stack
               direction={"row"}
               justifyContent={"space-between"}
               alignItems={"center"}
-              sx={{ width: "30%" }}
+              sx={{ width: `${smallScreen?"100%":"30%"}`,mt:`${smallScreen && "10px"}` }}
             >
               <Typography fontSize={14} color={"rgba(0,0,0,0.4)"}>
                 AMOUNT TO PAY
@@ -234,9 +237,11 @@ import { baseUrl, projectId } from "../../utils/constant";
                 {CURRENCY_FORMATTER("" + amount)}
               </Typography>
             </Stack>
+
           </Stack>
+
           <Stack
-            direction={"row"}
+            direction={`${smallScreen?"column":"row"}`}
             sx={{
               width: "100%",
               bgcolor: "#FFF",
@@ -244,13 +249,14 @@ import { baseUrl, projectId } from "../../utils/constant";
             }}
           >
             <Tabs
-              orientation="vertical"
+              orientation={`${smallScreen?"horizontal":"vertical"}`}
               value={tabIndex}
               onChange={handleTabChange}
               TabIndicatorProps={{ sx: { left: 0, width: 6 } }}
               sx={{
-                width: "250px",
+                width: `${smallScreen?"100%":"250px"}`,
                 display: "flex",
+                flexDirection:`${smallScreen?"row":"column"}`,
                 justifyContent: "space-between",
                 bgcolor: "#ec5b2405",
                 overflow: "unset",
@@ -324,7 +330,7 @@ import { baseUrl, projectId } from "../../utils/constant";
                         ? "Card number is either not of 16 digits or it is non-numeric"
                         : ""
                     }
-                    sx={{ ml: 3, width: 400 }}
+                    sx={{ ml: 3, width: `${smallScreen?"90%":"400"}` }}
                     InputLabelProps={{ shrink: true }}
                     value={cardNumber}
                     onChange={handleCardChange}

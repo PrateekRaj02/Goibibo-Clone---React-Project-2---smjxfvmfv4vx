@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { baseUrl, projectId } from "../../utils/constant";
 import Bus_Card from "./Bus_Card";
+import {useMediaQuery} from '@mui/material';
+import GlobalLoader from "../loder/GlobalLoader";
 
 const Bus_Search_Page = () => {
   const source = useSelector((store) => store.bus.source);
@@ -9,6 +11,8 @@ const Bus_Search_Page = () => {
   const day = useSelector((store) => store.bus.day);
   const departureDate = useSelector((store) => store.bus.departureDate);
   const [buses, setBuses] = useState([]);
+  const [loading,setLoading]=useState(true);
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const getBusData = async () => {
     const apiUrl =
@@ -25,6 +29,7 @@ const Bus_Search_Page = () => {
     // console.log(jsonData);
     if (response.ok) {
       setBuses(jsonData.data.buses);
+      setLoading(false);
     }
   };
 
@@ -32,9 +37,9 @@ const Bus_Search_Page = () => {
     getBusData();
   }, []);
 
-  return (
+  return loading ? <GlobalLoader/> : (
     <div className="mt-2">
-      <div className="flex flex-col gap-4 w-10/12 mx-auto">
+      <div className={`flex flex-col gap-4 ${smallScreen ? "w-full" :"w-10/12 mx-auto"}`}>
         {buses.map((bus) => {
           return (
             <Bus_Card

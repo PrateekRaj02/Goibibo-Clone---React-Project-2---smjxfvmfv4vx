@@ -17,7 +17,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-// import { useHotelSearchContext } from "../../../../Contexts/HotelSearchProvider";
+
 import {
   HOTEL_AMENITIES,
   CHILD_AND_EXTRA_BEDS,
@@ -26,13 +26,13 @@ import {
 } from "../../utils/constant";
 import dayjs from "dayjs";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-// import { CURRENCY_FORMATTER } from "../../../../utils";
+
 import { IoKeySharp } from "react-icons/io5";
 import { TbMoodKid } from "react-icons/tb";
 import { FiFileText } from "react-icons/fi";
 import { FaMapMarkerAlt } from "react-icons/fa";
-// import { useAuthContext } from "../../../../Contexts/AuthProvider";
 import { useSelector } from "react-redux";
+import {useMediaQuery} from '@mui/material';
 
 function getRating(rating) {
   if (rating >= 9) return "Exceptional";
@@ -64,7 +64,6 @@ export default function Hotel_Detail() {
   const checkoutdate = useSelector((store) => store.hotel.checkoutDate);
   const departureTime="12:00";
   const arrivalTime="06:00";
-  // console.log(checkindate+" "+checkoutdate);
   const depHour = +departureTime.slice(0, 2);
   const depMin = +departureTime.slice(3, 5);
   const depDate = new dayjs(checkindate).hour(depHour).minute(depMin);
@@ -77,13 +76,12 @@ export default function Hotel_Detail() {
   const hotelID = params.id;
   const [isLoading, setIsLoading] = useState(true);
   const [hotel, setHotel] = useState({});
-  // const { getHotelData } = useHotelSearchContext();
   const [hasError, setHasError] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openPolicy, setOpenPolicy] = useState(false);
-  // const { setShowLoginSignupForm, isLoggedIn, setRedirect, setRedirectTo } =
-  //   useAuthContext();
+  const smallScreen=useMediaQuery('(max-width:650px)');
+  
   function handleMouseIn(e) {
     setAnchorEl(e.target);
     setOpenPolicy(true);
@@ -169,6 +167,7 @@ export default function Hotel_Detail() {
       setIsLoading(true);
     };
   }, []);
+
   return (
     <Container sx={{ mt: 8.2, mb: 4 }}>
       {isLoading && (
@@ -185,7 +184,7 @@ export default function Hotel_Detail() {
             sx={{
               width: "100%",
               display: "grid",
-              gridTemplateColumns: "repeat(4,1fr)",
+              gridTemplateColumns: `${smallScreen?"repeat(3,1fr)":"repeat(4,1fr)"}`,
               gridTemplateRows: "repeat(2,1fr)",
               gap: "20px",
               py: 2,
@@ -197,9 +196,9 @@ export default function Hotel_Detail() {
                 <Box
                   key={index}
                   sx={{
-                    height: index === 0 ? "400px" : "190px",
-                    gridRow: index === 0 ? "span 2" : "span 1",
-                    gridColumn: index === 0 ? "span 2" : "span 1",
+                    height: index === 0 ? `${smallScreen?"100px": "400px"}` : "190px",
+                    gridRow: index === 0 ? `${smallScreen ? "": "span 2"}` : "span 1",
+                    gridColumn: index === 0 ? `${smallScreen ?"": "span 2"}` : "span 1",
                     borderRadius: "10px",
                   }}
                   className="hotel-loader"
@@ -249,7 +248,7 @@ export default function Hotel_Detail() {
                 sx={{
                   width: "100%",
                   display: "grid",
-                  gridTemplateColumns: "repeat(4,1fr)",
+                  gridTemplateColumns: `${smallScreen?"repeat(3,1fr)":"repeat(4,1fr)"}`,
                   gridTemplateRows: "repeat(2,1fr)",
                   gap: "20px",
                   py: 2,
@@ -260,9 +259,9 @@ export default function Hotel_Detail() {
                     <Box
                       key={index}
                       sx={{
-                        height: index === 0 ? "400px" : "190px",
-                        gridRow: index === 0 ? "span 2" : "span 1",
-                        gridColumn: index === 0 ? "span 2" : "span 1",
+                        height: index === 0 ? `${smallScreen?"190px": "400px"}` : "190px",
+                        gridRow: index === 0 ? `${smallScreen ? "": "span 2"}` : "span 1",
+                        gridColumn: index === 0 ? `${smallScreen ?"": "span 2"}` : "span 1",
                         borderRadius: "10px",
                       }}
                     >
@@ -271,7 +270,7 @@ export default function Hotel_Detail() {
                         src={src}
                         style={{
                           objectFit: "cover",
-                          height: index === 0 ? "400px" : "190px",
+                          height: index === 0 ? `${smallScreen?"190px": "400px"}` : "190px",
                           width: "100%",
                           borderRadius: "10px",
                         }}

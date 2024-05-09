@@ -6,6 +6,7 @@ import { IoCheckmarkSharp } from "react-icons/io5";
 import { IoKeySharp } from "react-icons/io5";
 // import { CURRENCY_FORMATTER } from "../../../../utils";
 import { HOTEL_AMENITIES } from "../../utils/constant";
+import {useMediaQuery} from '@mui/material';
 
 function getRating(rating) {
   if (rating >= 9) return "Exceptional";
@@ -14,7 +15,9 @@ function getRating(rating) {
   if (rating >= 6) return "Good";
   return "Pleasant";
 }
-export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
+
+export default function Hotel_Card({ hotelData, checkinDate,checkoutDate }) {
+
   const {
     amenities,
     avgCostPerNight,
@@ -27,6 +30,7 @@ export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
   } = hotelData;
 
   const navigate=useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const handleBook=(_id)=>{
     navigate(`/hotel/${_id}`);
@@ -45,14 +49,17 @@ export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
           HOTEL_AMENITIES.findIndex((item) => item.name === amenities[1])
         ].icon
       : null;
+
   return (
     <Stack
-      direction={"row"}
+      direction={`${smallScreen?"column":"row"}`}
       sx={{ p: 2, bgcolor: "#fff", borderRadius: "10px" }}
       gap={2}
     >
       <CardImageCarousel images={images} />
+
       <Stack direction={"row"} flex={1}>
+
         <Stack gap={1} alignItems={"flex-start"} sx={{ width: "75%" }}>
           <Typography fontSize={18} fontWeight={600}>
             {name}
@@ -147,10 +154,11 @@ export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
             )}
           </Stack>
         </Stack>
+
         <Stack
           gap={1}
           sx={{ width: "25%" }}
-          alignItems={"flex-end"}
+          alignItems={"center"}
           justifyContent={"flex-end"}
         >
           {rooms.length <= 7 && (
@@ -218,6 +226,7 @@ export default function HotelCard({ hotelData, checkinDate,checkoutDate }) {
             Book Now
           </Button>
         </Stack>
+
       </Stack>
     </Stack>
   );

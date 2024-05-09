@@ -10,6 +10,13 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoIosThumbsUp } from "react-icons/io";
 import { IoIosThumbsDown } from "react-icons/io";
+import {useMediaQuery} from '@mui/material';
+
+
+
+export default function BookingModal({ bookingWait }) {
+  const navigate = useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
 const modalStyle = {
   position: "absolute",
@@ -17,11 +24,9 @@ const modalStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   height: "fit-content",
-  width: "fit-content",
+  width:`${smallScreen?"85%": "fit-content"}`,
 };
-
-export default function BookingModal({ bookingWait }) {
-  const navigate = useNavigate();
+  
   return (
     <Modal open={bookingWait.startWaiting} onClose={() => navigate("/")}>
       <Box sx={modalStyle}>
@@ -39,7 +44,7 @@ export default function BookingModal({ bookingWait }) {
               }}
             >
               <Typography fontSize={24} fontWeight={600} color="#ec5b24">
-                Booking successful! <IoIosThumbsUp color="#ec5b24" />
+              <IoIosThumbsUp color="#ec5b24" fontSize={20} /> Booking successful! 
               </Typography>
               <Typography fontSize={14} color={"rgba(0,0,0,0.36)"}>
                 You will be redirected to home page in a few seconds...

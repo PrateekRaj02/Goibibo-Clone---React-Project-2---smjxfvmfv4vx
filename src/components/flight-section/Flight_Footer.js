@@ -5,12 +5,14 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import paymentImage from "../../assets/payment.png";
 import download from "../../assets/download.png";
+import {useMediaQuery} from '@mui/material';
 
 const Flight_Footer = () => {
+  const smallScreen=useMediaQuery('(max-width:650px)');
   return (
     <div className="bg-white">
       <div className="w-10/12 m-auto p-2">
-        <div className="flex justify-between">
+        <div className={`${smallScreen?"grid grid-cols-2":"flex justify-between"}`}>
           <div className="flex flex-col gap-2 my-4">
             <header className="mb-2 font-bold text-sm">OUR PRODUCTS</header>
             <ul className="text-sm text-gray-400">
