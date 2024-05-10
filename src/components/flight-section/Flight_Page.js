@@ -33,16 +33,10 @@ import dayjs from "dayjs";
 import {useMediaQuery} from '@mui/material';
 
 const Flight_Page = () => {
-  // const [fromOpen, setFromOpen] = useState(false);
-  // const [toOpen, setToOpen] = useState(false);
-  // const [source, setSource] = useState("");
-  // const [destination, setDestination] = useState("");
-  // const [day, setDay] = useState("Mon");
   const source = useSelector((store) => store.flight.sourceSelectedAirport);
   const destination = useSelector(
     (store) => store.flight.destinationSelectedAirport
   );
-  // console.log(selectedAirport);
   const [airports, setAirports] = useState([]);
   const [depDate, setDepDate] = useState(new dayjs());
   const [day,setDay]=useState("Mon");
@@ -51,7 +45,6 @@ const Flight_Page = () => {
   const destinationRef = useRef();
   const navigate = useNavigate();
   const smallScreen=useMediaQuery('(max-width:650px)');
-  // console.log(day);
 
   const getAllAirports = async () => {
     const apiUrl = baseUrl + "airport";
@@ -76,23 +69,14 @@ const Flight_Page = () => {
     dispatch(setSelectedDay(dayOfWeek));
   };
 
-  
-
   const handleSearchClick = async () => {
     if(source === destination){
       window.alert("Source and Destination can not be same.");
       return;
     }
-    // const from = sourceRef.current.value.slice(0, 3);
-    // const to = destinationRef.current.value.slice(0, 3);
-    // dispatch(setSourceSelectedAirport(from));
-    // dispatch(setDestinationSelectedAirport(to));
-    // console.log(source);
-    // console.log(destination);
     const apiUrl =
       baseUrl +
       `flight?search={"source":"${source}","destination":"${destination}"}&day=${day}&limit=1000`;
-    // const apiUrl=baseUrl+`airport?search={"city":"mumbai"}`;
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
@@ -106,23 +90,14 @@ const Flight_Page = () => {
     }
   };
 
-  const handleExchange = () => {
-    const temp = source;
-    setSource(destination);
-    setDestination(temp);
-  };
-
   const handleDaySelect = (e) => {
     setDay(e.target.value);
-    // console.log(e.target.value);
   };
 
   const handleFromClick = () => {
     let from = sourceRef.current.value.slice(0, 3);
     let fromCity=sourceRef.current.value.split(", ")[1];
     dispatch(setSourceCity(fromCity));
-    // console.log(fromCity);
-    // console.log(sourceRef.current.value.split("-")[1]);
     dispatch(setSourceAirport(sourceRef.current.value.split("-")[1]));
     dispatch(setSourceSelectedAirport(from));
     
@@ -132,12 +107,8 @@ const Flight_Page = () => {
     let to = destinationRef.current.value.slice(0, 3);
     let toCity=destinationRef.current.value.split(", ")[1];
     dispatch(setDestinationCity(toCity));
-    // console.log(toCity);
-    // console.log(to);
     dispatch(setDestinationAirport(destinationRef.current.value.split("-")[1]));
     dispatch(setDestinationSelectedAirport(to));
-    // console.log(destinationRef.current.value.slice(0,3));
-    // console.log(destination);
   };
 
   useEffect(() => {
@@ -196,18 +167,6 @@ const Flight_Page = () => {
                 >{`${airport.iata_code}-${airport.name}, ${airport.city}`}</option>
               ))}
             </select>
-            {/* <div
-              className="h-10 w-10 rounded-full self-center -mx-6 border border-gray-300 cursor-pointer 
-          bg-gray-100 bg-opacity-100 flex justify-center items-center"
-              onClick={handleExchange}
-            >
-              <CompareArrowsIcon />
-            </div> */}
-            {/* <TextField
-              label="To"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-            /> */}
             <select
               name=""
               id=""
@@ -235,36 +194,7 @@ const Flight_Page = () => {
               />
             </LocalizationProvider>
             </div>
-            {/* <LocalizationProvider dateAdapter={DateAdapter}>
-            <DatePicker label="Choose Date" 
-            sx={{ width: 200 }}
-						slotProps={{
-							textField: {
-								variant: "standard",
-								InputLabelProps: { shrink: true },
-							},
-						}}
-						format="DD MMM, dddd"
-						disablePast
-						reduceAnimations
-						/>
-            </LocalizationProvider> */}
           </div>
-
-          {/* <div className="w-[96%] border border-gray-300 m-2 p-1 rounded-lg flex">
-            <div className="w-4/12 cursor-pointer hover:bg-blue-100  border-r-2" onClick={()=>setFromOpen(true)}>
-              <p>From</p>
-              <p className="font-bold text-2xl">{selectedAirport.city}</p>
-              <p>{selectedAirport.iata_code+"," +selectedAirport.name}</p>
-              {fromOpen && <SearchOption setOpen={setFromOpen}/>}
-            </div>
-            <div className="w-4/12 cursor-pointer hover:bg-blue-100  border-r-2" onClick={()=>setToOpen(true)}>
-              <p>To</p>
-              <p className="font-bold text-2xl">City Name</p>
-              <p>Code, Airport Name</p>
-              {toOpen && <SearchOption setOpen={setToOpen}/>}
-            </div>
-          </div> */}
           <button
             className={`text-white rounded-full absolute ${smallScreen?"-bottom-8 left-[20%]":"left-[40%] -bottom-8"} bg-orange-600 py-4 px-8 font-bold text-xl`}
             onClick={handleSearchClick}

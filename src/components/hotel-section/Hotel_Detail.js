@@ -169,7 +169,7 @@ export default function Hotel_Detail() {
   }, []);
 
   return (
-    <Container sx={{ mt: 8.2, mb: 4 }}>
+    <Container sx={{ mt: 8.2, pb: 4 }}>
       {isLoading && (
         <Box sx={{ pt: 3 }}>
           <Box
@@ -266,7 +266,7 @@ export default function Hotel_Detail() {
                       }}
                     >
                       <img
-                        loading="lazy"
+                        loading="eager"
                         src={src}
                         style={{
                           objectFit: "cover",
@@ -421,7 +421,7 @@ export default function Hotel_Detail() {
                           ></Box>
                           <Typography color={"#2b9950"}>
                             Free Cancellation till{" "}
-                            {checkindate.subtract(1, "day").format("DD MMM")}
+                            {checkindate.add(1, "day").format("DD MMM")}
                           </Typography>
                           <Box
                             id={_id}
@@ -480,7 +480,7 @@ export default function Hotel_Detail() {
                     </Typography>
                     <Typography>
                       Cancel your reservation before{" "}
-                      {checkindate.subtract(1, "day").format("DD MMMM YYYY")}{" "}
+                      {checkindate.add(1, "day").format("DD MMMM YYYY")}{" "}
                       12:00 AM, to get a full refund
                     </Typography>
                   </Box>

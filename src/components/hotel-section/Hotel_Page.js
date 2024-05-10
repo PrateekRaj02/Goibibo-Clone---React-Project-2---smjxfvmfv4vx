@@ -70,12 +70,12 @@ const Hotel_Page = () => {
 
   return (
     <div className="">
-      <div className={`absolute ${smallScreen?"h-3/4 w-full -top-[15%]":"h-[900px] w-[1050px]"} rounded-full bg-orange-500 -top-[70%] -left-[7%]`}></div>
+      <div className="absolute h-3/4 w-full rounded-full bg-orange-500 -top-1/4"></div>
       <div className="w-10/12 m-auto pb-5">
         <h1 className="font-bold text-2xl my-4 relative text-white z-20">
           Book Hotels & Homestays
         </h1>
-        <div className={`rounded-lg flex flex-col ${smallScreen?"w-full":"w-1/2"} bg-white shadow-md h-80 relative z-20`}>
+        <div className={`rounded-lg flex flex-col ${smallScreen?"w-full":"w-1/2"} bg-white shadow-md pb-10 relative z-20`}>
           <div>
             <ul className="p-4 flex gap-2">
               <li className="flex gap-2">
@@ -88,8 +88,9 @@ const Hotel_Page = () => {
               </li>
             </ul>
           </div>
+          <label htmlFor="" className="pl-4">Destination</label>
           <select name="" id="" className="p-4 border m-2 rounded-lg shadow-lg cursor-pointer" ref={cityRef} onChange={handleChange}>
-            <label htmlFor="">Where</label>
+            
             {city.map((cit) => {
               return (
                 <option value={`${cit.cityState}`} key={cit._id}>
@@ -98,7 +99,7 @@ const Hotel_Page = () => {
               );
             })}
           </select>
-          <div className={`${smallScreen?"flex flex-col gap-4 w-[95%] mx-auto mt-2":"flex justify-between p-1"}`}>
+          <div className={`${smallScreen?"flex flex-col gap-4 w-[95%] mx-auto mt-2":"flex flex-col gap-4 p-1"}`}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Check-In"

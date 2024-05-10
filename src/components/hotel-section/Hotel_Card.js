@@ -8,6 +8,7 @@ import { IoKeySharp } from "react-icons/io5";
 import { HOTEL_AMENITIES } from "../../utils/constant";
 import {useMediaQuery} from '@mui/material';
 
+
 function getRating(rating) {
   if (rating >= 9) return "Exceptional";
   if (rating >= 8) return "Excellent";
@@ -111,7 +112,7 @@ export default function Hotel_Card({ hotelData, checkinDate,checkoutDate }) {
             <IoCheckmarkSharp size={18} />
             <Typography fontSize={14} fontWeight={600}>
               Free Cancellation till{" "}
-              {checkinDate.subtract(1, "day").format("MMM DD")}
+              {checkinDate.add(1, "day").format("MMM DD")}
             </Typography>
           </Stack>
           {amenities.length > 0 && (

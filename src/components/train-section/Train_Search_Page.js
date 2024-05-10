@@ -3,6 +3,7 @@ import { Pagination } from "@mui/material";
 import Train_Card from "./Train_Card";
 import { useSelector } from "react-redux";
 import { baseUrl, projectId } from "../../utils/constant";
+import GlobalLoader from "../loder/GlobalLoader";
 
 const Train_Search_Page = () => {
   const [trains, setTrains] = useState([]);
@@ -12,6 +13,7 @@ const Train_Search_Page = () => {
   const departureDate=useSelector((store)=>store.train.departureDate);
   const [availablityBoxId, setAvailablityBoxId] = useState(0);
   const [page, setPage] = useState(1);
+  const [loading,setLoading]=useState(true);
 
   const getTrainData = async () => {
     const apiUrl =
@@ -28,6 +30,7 @@ const Train_Search_Page = () => {
     // console.log(jsonData);
     if (response.ok) {
       setTrains(jsonData.data.trains);
+      setLoading(false);
     }
   };
 
@@ -35,7 +38,7 @@ const Train_Search_Page = () => {
     getTrainData();
   }, []);
 
-  return (
+  return loading ? <GlobalLoader/> : (
     <div>
       <div>
         {trains.slice(

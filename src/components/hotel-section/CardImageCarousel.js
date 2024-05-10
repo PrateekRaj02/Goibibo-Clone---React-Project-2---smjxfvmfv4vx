@@ -11,7 +11,7 @@ const iconSX = {
   p: 0.5,
   ":hover": { bgcolor: "#fff" },
   opacity: 0,
-  transition: "opacity 180ms",
+  // transition: "opacity 180ms",
 };
 const arrowProps = { size: 16, color: "#0770e4" };
 
@@ -39,13 +39,13 @@ export default function CardImageCarousel({ images }) {
     >
       <Stack
         direction={"row"}
-        sx={{ transform: `translate(${-300 * index}px)` }}
+        // sx={{ transform: `translate(${-300 * index}px)` }}
       >
         {images.map((image, index) => {
           return (
             <Box key={index} sx={{ width: `${smallScreen?"100%":"300px"}`, height: "200px" }}>
               <img
-                loading="lazy"
+                loading="eager"
                 src={image}
                 style={{
                   width: `${smallScreen?"100%":"300px"}`,
@@ -88,7 +88,7 @@ export default function CardImageCarousel({ images }) {
           background:
             "linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%);",
           // opacity: 0,
-          transition: "all 180ms",
+          // transition: "all 180ms",
         }}
         // className="hide"
       >
@@ -109,3 +109,5 @@ export default function CardImageCarousel({ images }) {
     </Box>
   );
 }
+
+
