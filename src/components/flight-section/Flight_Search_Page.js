@@ -25,6 +25,7 @@ const Flight_Search_Page = () => {
   const [stops,setStops]=useState(-1);
   const [depTime,setDepTime]=useState("");
   const [priceSorting,setPriceSorting]=useState(0);
+  // const [filterObj,setFilterObj]=useState({"stops":"","departureTime":""})
   const smallScreen=useMediaQuery('(max-width:650px)');
   const [showFilter,setShowFilter]=useState(true);
 
@@ -49,6 +50,7 @@ const Flight_Search_Page = () => {
 
     const handleStopsChecked= async (value)=>{
       setStops(value);
+      // setFilterObj({...filterObj,"stops":{"eq":value}})
       const apiUrl =
         baseUrl +
         `flight?search={"source":"${source}","destination":"${destination}"}&day=${day}&filter={"stops":{"$eq":${value}}}`;
@@ -111,7 +113,8 @@ const Flight_Search_Page = () => {
 
     const handleAirlineChange=(company)=>{
       setAirline(company);
-      const arr=flights.filter((flight)=>flight.flightID.slice(0,2) === company);
+      const tempArr=[...tempFlights];
+      const arr=tempArr.filter((flight)=>flight.flightID.slice(0,2) === company);
       setFlights(arr);
     }
 

@@ -86,7 +86,7 @@ const Bus_Page = () => {
           Bus Ticket Booking
         </h1>
         <div className={`rounded-lg flex flex-col ${smallScreen ? "w-[100%]" :"w-1/2"} bg-white shadow-md h-80 relative z-20`}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          
             <label htmlFor="" className="p-2">
               From
             </label>
@@ -122,7 +122,8 @@ const Bus_Page = () => {
                 );
               })}
             </select>
-            <div className={`${smallScreen?"w-[95%] mt-2 ml-2 mr-2":"mt-2 ml-2"}`}>
+            <div className={`${smallScreen?"w-[95%] mt-2 ml-2 mr-2":"w-[95%] mt-2 mx-auto"}`}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Check-In"
                 disablePast
@@ -132,8 +133,9 @@ const Bus_Page = () => {
                 value={depDate}
                 onChange={(date) => handleDateChange(date)}
               />
+              </LocalizationProvider>
             </div>
-          </LocalizationProvider>
+          
           <button
             className={`text-white rounded-full absolute ${smallScreen?"left-[21%]":"left-[26%]"} -bottom-[7%] z-20 bg-orange-600 py-4 px-8 font-bold text-xl`}
             onClick={handleSearchClick}
